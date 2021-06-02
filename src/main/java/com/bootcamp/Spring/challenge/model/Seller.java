@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,11 +17,12 @@ public class Seller {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seller_sequence")
     @SequenceGenerator(name = "seller_sequence", sequenceName = "seller_sequence")
-    private Integer id;
+    private Integer sellerId;
 
-    @Column(name="sellerName")
+    //@Column(name="sellerName")
     private String sellerName;
 
+    //@Column(name="countFollowers")
     private Integer countFollowers;
 
     @ManyToMany(mappedBy="followedSellers")
@@ -32,5 +34,9 @@ public class Seller {
 
     public Seller() {
     }
+
+    @OneToMany(mappedBy = "seller")
+    @Column(name = "products")
+    private List<Product> products;
 
 }

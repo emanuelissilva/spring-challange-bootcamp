@@ -34,8 +34,11 @@ public class SpringChallengeApplication {
 		user1.followSeller(seller2);
 		user2.followSeller(seller2);
 
+
 		viewerRepository.saveAll(viewers);
 		streamRepository.saveAll(streams);
+		seller1.getCountFollowers();
+		seller2.getCountFollowers();
 	}
 
 }

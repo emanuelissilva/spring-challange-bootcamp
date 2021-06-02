@@ -3,7 +3,7 @@ package com.bootcamp.Spring.challenge.controller;
 import java.util.List;
 
 import com.bootcamp.Spring.challenge.dto.UserDTO;
-import com.bootcamp.Spring.challenge.model.Seller;
+import com.bootcamp.Spring.challenge.dto.UserFollowedListDTO;
 import com.bootcamp.Spring.challenge.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +35,13 @@ public class UserController {
     @PostMapping("/{userId}/follow/{userIdToFollow}")
     public ResponseEntity follow(@PathVariable("userId") Integer userId, @PathVariable("userIdToFollow") Integer sellerId) {
        UserDTO std = userService.followSeller(userId, sellerId);
+        return new ResponseEntity<>(std, HttpStatus.CREATED);
+
+    }
+
+    @GetMapping("/{userId}/followed/list")
+    public ResponseEntity follow(@PathVariable("userId") Integer userId) {
+        UserFollowedListDTO std = userService.getUserById(userId);
         return new ResponseEntity<>(std, HttpStatus.CREATED);
 
     }

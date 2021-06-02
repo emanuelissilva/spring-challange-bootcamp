@@ -2,6 +2,8 @@ package com.bootcamp.Spring.challenge.controller;
 
 import com.bootcamp.Spring.challenge.dto.CountFollowsDTO;
 import com.bootcamp.Spring.challenge.dto.SellerDTO;
+import com.bootcamp.Spring.challenge.dto.SellerProductListDTO;
+import com.bootcamp.Spring.challenge.model.Seller;
 import com.bootcamp.Spring.challenge.service.SellerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,12 @@ public class SellerController {
     @GetMapping("/{userId}/followers/list")
     public ResponseEntity<SellerDTO> getFollowers(@PathVariable("userId") Integer sellerId) {
         SellerDTO seller = sellerService.getFollowersList(sellerId);
+        return new ResponseEntity<>(seller, HttpStatus.OK);
+    }
+
+    @GetMapping("/products/followed/{userId}/list")
+    public ResponseEntity<SellerProductListDTO> getProducts(@PathVariable("userId") Integer sellerId) {
+        SellerProductListDTO seller = sellerService.getProductlist(sellerId);
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }
 

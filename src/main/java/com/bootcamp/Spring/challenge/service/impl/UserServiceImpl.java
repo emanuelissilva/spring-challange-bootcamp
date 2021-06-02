@@ -1,6 +1,6 @@
 package com.bootcamp.Spring.challenge.service.impl;
 
-import com.bootcamp.Spring.challenge.dto.UserDTO;
+import com.bootcamp.Spring.challenge.dto.*;
 import com.bootcamp.Spring.challenge.model.Seller;
 import com.bootcamp.Spring.challenge.model.User;
 import com.bootcamp.Spring.challenge.repositories.SellerRepository;
@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,6 +56,13 @@ public class UserServiceImpl implements UserService {
         return mapEntityToDTO(user);
     }
 
+    @Transactional
+    @Override
+    public UserFollowedListDTO getUserById(Integer idUser) {
+        User user = userRepository.getOne(idUser);
+        return mapUserFollowedListToDTO(user);
+    }
+
     private void mapDTOToEntity(UserDTO userDTO, User user) {
         user.setUserName(userDTO.getUserName());
         if (null == user.getFollowedSellers()) {
@@ -80,5 +88,24 @@ public class UserServiceImpl implements UserService {
                 .map(Seller::getSellerName)
                 .collect(Collectors.toList()));
         return responseDTO;
+    }
+
+    private UserFollowedListDTO mapUserFollowedListToDTO(User user) {
+        UserFollowedListDTO responseDTO = new UserFollowedListDTO();
+        responseDTO.setUserName(user.getUserName());
+        responseDTO.setId(user.getUserID());
+        responseDTO.setFollowedSellers(mapFollowed(user.getFollowedSellers()));
+        return responseDTO;
+    }
+
+    private List<FollowedInfoDTO> mapFollowed(Set<Seller> followedList){
+        List<FollowedInfoDTO> list = new ArrayList<>();
+        followedList.forEach(followed -> {
+            FollowedInfoDTO followedListFinal = new FollowedInfoDTO();
+            followedListFinal.setUserName(followed.getSellerName());
+            followedListFinal.setId(followed.getSellerId());
+            list.add(followedListFinal);
+        });
+        return list;
     }
 }
