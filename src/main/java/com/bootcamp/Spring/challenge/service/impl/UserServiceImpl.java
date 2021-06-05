@@ -6,14 +6,12 @@ import com.bootcamp.Spring.challenge.model.User;
 import com.bootcamp.Spring.challenge.repositories.SellerRepository;
 import com.bootcamp.Spring.challenge.repositories.UserRepository;
 import com.bootcamp.Spring.challenge.service.UserService;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,6 +46,16 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
+    public UserDTO unfollowSeller(Integer userId, Integer sellerId) {
+        User user = userRepository.getOne(userId);
+        Seller seller = sellerRepository.getOne(sellerId);
+        user.getFollowedSellers().remove(seller);
+        User userSaved = userRepository.save(user);
+        return mapEntityToDTO(user);
+    }
+
+    @Transactional
+    @Override
     public UserDTO followSeller(Integer idUser, Integer idSeller) {
         User user = userRepository.getOne(idUser);
         Seller seller = sellerRepository.getOne(idSeller);
@@ -60,6 +68,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserFollowedListDTO getUserById(Integer idUser) {
         User user = userRepository.getOne(idUser);
+        return mapUserFollowedListToDTO(user);
+    }
+
+    @Override
+    public UserFollowedListDTO getFollowedAsc(Integer idUser) {
+        User user = userRepository.getOne(idUser);
+        List<FollowedInfoDTO> list = new ArrayList<>();
+        //user.getFollowedSellers(Sort.Direction.ASC, "userName")
+        return mapUserFollowedListToDTO(user);
+
+    }
+
+
+    @Override
+    public UserFollowedListDTO getFollowedDesc(Integer idUser) {
+        User user = userRepository.getOne(idUser);
+//        user.getFollowedSellers().stream().sorted(Collections.reverseOrder())
+//                .collect(Collectors.toList());
         return mapUserFollowedListToDTO(user);
     }
 

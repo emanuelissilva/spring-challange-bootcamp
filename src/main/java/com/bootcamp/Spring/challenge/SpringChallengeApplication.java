@@ -28,10 +28,14 @@ public class SpringChallengeApplication {
 
 		Seller seller1 = new Seller("seller1");
 		Seller seller2 = new Seller("seller2");
-		List<Seller> streams = Arrays.asList(seller1, seller2);
+		Seller seller3 = new Seller("amanda");
+		Seller seller4 = new Seller("zeta");
+		List<Seller> streams = Arrays.asList(seller1, seller2, seller3, seller4);
 
 		user1.followSeller(seller1);
 		user1.followSeller(seller2);
+		user1.followSeller(seller3);
+		user1.followSeller(seller4);
 		user2.followSeller(seller2);
 
 

@@ -56,14 +56,12 @@ public class SellerServiceImpl implements SellerService {
 
     private SellerProductListDTO mapEntityProductToProductListDTO(Seller seller) {
         SellerProductListDTO responseProductListDTO = new SellerProductListDTO();
-        List<ProductDTO> list = new ArrayList<>();
-        list.add(mapProductToProductDTO(seller.getProducts()));
-        responseProductListDTO.setProducts(list);
+        responseProductListDTO.setProducts(mapProductToProductDTO(seller.getProducts()));
         return responseProductListDTO;
     }
 
-    private ProductDTO mapProductToProductDTO(List<Product> product) {
-        ProductDTO productDTO = new ProductDTO();
+    private List<ProductDTO> mapProductToProductDTO(List<Product> product) {
+        List<ProductDTO> productDTOList = new ArrayList<>();
         Set<ProductDetail> list = new HashSet<>();
         ProductDetail detail = new ProductDetail();
         product.forEach(product1 -> {
@@ -73,17 +71,17 @@ public class SellerServiceImpl implements SellerService {
             detail.setProductType(product1.getProductType());
             detail.setProductColor(product1.getProductColor());
             detail.setProductNotes(product1.getProductNotes());
-        });
-        product.forEach(product1 -> {
+            ProductDTO productDTO = new ProductDTO();
             productDTO.setPostDate(product1.getPostDate());
             productDTO.setPostId(product1.getPostId());
             productDTO.setCategory(product1.getCategory());
             productDTO.setPrice(product1.getPrice());
             productDTO.setSellerId(product1.getSeller().getSellerId());
+            list.add(detail);
+            productDTO.setDetail(list);
+            productDTOList.add(productDTO);
         });
-        list.add(detail);
-        productDTO.setDetail(list);
-        return productDTO;
+        return productDTOList;
     }
 
 

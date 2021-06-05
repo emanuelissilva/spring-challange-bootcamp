@@ -36,15 +36,30 @@ public class UserController {
     public ResponseEntity follow(@PathVariable("userId") Integer userId, @PathVariable("userIdToFollow") Integer sellerId) {
        UserDTO std = userService.followSeller(userId, sellerId);
         return new ResponseEntity<>(std, HttpStatus.CREATED);
+    }
 
+    @PostMapping("/{userId}/unfollow/{userIdToUnfollow}")
+    public ResponseEntity unfollow(@PathVariable("userId") Integer userId, @PathVariable("userIdToUnfollow") Integer sellerId) {
+        UserDTO std = userService.unfollowSeller(userId, sellerId);
+        return new ResponseEntity<>(std, HttpStatus.CREATED);
     }
 
     @GetMapping("/{userId}/followed/list")
-    public ResponseEntity follow(@PathVariable("userId") Integer userId) {
+    public ResponseEntity followed(@PathVariable("userId") Integer userId) {
         UserFollowedListDTO std = userService.getUserById(userId);
         return new ResponseEntity<>(std, HttpStatus.CREATED);
-
     }
 
+    @GetMapping("/{userId}/followed/list?order=name_asc")
+    public ResponseEntity followedAsc(@PathVariable("userId") Integer userId) {
+        UserFollowedListDTO std = userService.getFollowedAsc(userId);
+        return new ResponseEntity<>(std, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{userId}/followed/list?order=name_desc")
+    public ResponseEntity followedDesc(@PathVariable("userId") Integer userId) {
+        UserFollowedListDTO std = userService.getFollowedDesc(userId);
+        return new ResponseEntity<>(std, HttpStatus.CREATED);
+    }
 
 }
