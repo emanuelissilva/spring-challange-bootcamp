@@ -6,7 +6,6 @@ import com.bootcamp.Spring.challenge.model.User;
 import com.bootcamp.Spring.challenge.repositories.SellerRepository;
 import com.bootcamp.Spring.challenge.repositories.UserRepository;
 import com.bootcamp.Spring.challenge.service.UserService;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +21,6 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private SellerRepository sellerRepository;
-
 
     @Transactional
     @Override
@@ -43,6 +41,25 @@ public class UserServiceImpl implements UserService {
         });
         return userDTOs;
     }
+
+    @Override
+    public List<FollowedInfoDTO> getFollowedSellerAsc(Integer userId) {
+        User response = userRepository.getOne(userId);
+        UserFollowedListDTO list = mapUserFollowedListToDTO(response);
+        List<FollowedInfoDTO> list1 = list.getFollowedSellers();
+        Collections.sort(list1, Comparator.comparing(FollowedInfoDTO::getUserName));
+        return list1;
+    }
+
+    @Override
+    public List<FollowedInfoDTO> getFollowedSellerDesc(Integer userId) {
+        User response = userRepository.getOne(userId);
+        UserFollowedListDTO list = mapUserFollowedListToDTO(response);
+        List<FollowedInfoDTO> list1 = list.getFollowedSellers();
+        Collections.sort(list1, Comparator.comparing(FollowedInfoDTO::getUserName).reversed());
+        return list1;
+    }
+
 
     @Transactional
     @Override
@@ -71,24 +88,6 @@ public class UserServiceImpl implements UserService {
         return mapUserFollowedListToDTO(user);
     }
 
-    @Override
-    public UserFollowedListDTO getFollowedAsc(Integer idUser) {
-        User user = userRepository.getOne(idUser);
-        List<FollowedInfoDTO> list = new ArrayList<>();
-        //user.getFollowedSellers(Sort.Direction.ASC, "userName")
-        return mapUserFollowedListToDTO(user);
-
-    }
-
-
-    @Override
-    public UserFollowedListDTO getFollowedDesc(Integer idUser) {
-        User user = userRepository.getOne(idUser);
-//        user.getFollowedSellers().stream().sorted(Collections.reverseOrder())
-//                .collect(Collectors.toList());
-        return mapUserFollowedListToDTO(user);
-    }
-
     private void mapDTOToEntity(UserDTO userDTO, User user) {
         user.setUserName(userDTO.getUserName());
         if (null == user.getFollowedSellers()) {
@@ -112,6 +111,7 @@ public class UserServiceImpl implements UserService {
         responseDTO.setFollowedSellers(user.getFollowedSellers()
                 .stream()
                 .map(Seller::getSellerName)
+                .sorted()
                 .collect(Collectors.toList()));
         return responseDTO;
     }

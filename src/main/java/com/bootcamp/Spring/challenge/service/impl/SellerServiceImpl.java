@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class SellerServiceImpl implements SellerService {
@@ -42,6 +39,46 @@ public class SellerServiceImpl implements SellerService {
     public SellerProductListDTO getProductlist(Integer idSeller) {
         Seller seller = sellerRepository.getOne(idSeller);
         return mapEntityProductToProductListDTO(seller);
+    }
+
+    @Override
+    public SellerProductListDTO getProductDesc(Integer sellerId) {
+        Seller response = sellerRepository.getOne(sellerId);
+        List<ProductDTO> list = mapEntityProductToProductListDTO(response).getProducts();
+        Collections.sort(list, Comparator.comparing(ProductDTO::getPostDate).reversed());
+        SellerProductListDTO finalresponse = new SellerProductListDTO();
+        finalresponse.setProducts(list);
+        return finalresponse;
+    }
+
+    @Override
+    public SellerProductListDTO getProductAsc(Integer sellerId) {
+        Seller response = sellerRepository.getOne(sellerId);
+        List<ProductDTO> list = mapEntityProductToProductListDTO(response).getProducts();
+        Collections.sort(list, Comparator.comparing(ProductDTO::getPostDate));
+        SellerProductListDTO finalresponse = new SellerProductListDTO();
+        finalresponse.setProducts(list);
+        return finalresponse;
+    }
+
+
+
+    @Override
+    public List<FollowerInfoDTO> getFollowersAsc(Integer sellerId) {
+        Seller response = sellerRepository.getOne(sellerId);
+        SellerDTO list = mapEntityToDTO(response);
+        List<FollowerInfoDTO> list1 = list.getFollowers();
+        Collections.sort(list1, Comparator.comparing(FollowerInfoDTO::getUserName));
+        return list1;
+    }
+
+    @Override
+    public List<FollowerInfoDTO> getFollowersDesc(Integer sellerId) {
+        Seller response = sellerRepository.getOne(sellerId);
+        SellerDTO list = mapEntityToDTO(response);
+        List<FollowerInfoDTO> list1 = list.getFollowers();
+        Collections.sort(list1, Comparator.comparing(FollowerInfoDTO::getUserName).reversed());
+        return list1;
     }
 
 

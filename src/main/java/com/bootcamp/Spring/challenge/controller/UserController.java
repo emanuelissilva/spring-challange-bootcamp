@@ -2,6 +2,7 @@ package com.bootcamp.Spring.challenge.controller;
 
 import java.util.List;
 
+import com.bootcamp.Spring.challenge.dto.FollowedInfoDTO;
 import com.bootcamp.Spring.challenge.dto.UserDTO;
 import com.bootcamp.Spring.challenge.dto.UserFollowedListDTO;
 import com.bootcamp.Spring.challenge.service.UserService;
@@ -50,15 +51,15 @@ public class UserController {
         return new ResponseEntity<>(std, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{userId}/followed/list?order=name_asc")
+    @GetMapping("/{userId}/followed/asc")
     public ResponseEntity followedAsc(@PathVariable("userId") Integer userId) {
-        UserFollowedListDTO std = userService.getFollowedAsc(userId);
+        List<FollowedInfoDTO> std = userService.getFollowedSellerAsc(userId);
         return new ResponseEntity<>(std, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{userId}/followed/list?order=name_desc")
+    @GetMapping("/{userId}/followed/desc")
     public ResponseEntity followedDesc(@PathVariable("userId") Integer userId) {
-        UserFollowedListDTO std = userService.getFollowedDesc(userId);
+        List<FollowedInfoDTO> std = userService.getFollowedSellerDesc(userId);
         return new ResponseEntity<>(std, HttpStatus.CREATED);
     }
 

@@ -1,13 +1,12 @@
 package com.bootcamp.Spring.challenge.controller;
 
-import com.bootcamp.Spring.challenge.dto.CountFollowsDTO;
-import com.bootcamp.Spring.challenge.dto.SellerDTO;
-import com.bootcamp.Spring.challenge.dto.SellerProductListDTO;
-import com.bootcamp.Spring.challenge.model.Seller;
+import com.bootcamp.Spring.challenge.dto.*;
 import com.bootcamp.Spring.challenge.service.SellerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -35,6 +34,30 @@ public class SellerController {
     public ResponseEntity<SellerProductListDTO> getProducts(@PathVariable("userId") Integer sellerId) {
         SellerProductListDTO seller = sellerService.getProductlist(sellerId);
         return new ResponseEntity<>(seller, HttpStatus.OK);
+    }
+
+    @GetMapping("/products/followed/{userId}/desc")
+    public ResponseEntity<SellerProductListDTO> getProductsDesc(@PathVariable("userId") Integer sellerId) {
+        SellerProductListDTO seller = sellerService.getProductDesc(sellerId);
+        return new ResponseEntity<>(seller, HttpStatus.OK);
+    }
+
+    @GetMapping("/products/followed/{userId}/asc")
+    public ResponseEntity<SellerProductListDTO> getProductsAsc(@PathVariable("userId") Integer sellerId) {
+        SellerProductListDTO seller = sellerService.getProductAsc(sellerId);
+        return new ResponseEntity<>(seller, HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/follower/asc")
+    public ResponseEntity followerAsc(@PathVariable("userId") Integer sellerId) {
+        List<FollowerInfoDTO> std = sellerService.getFollowersAsc(sellerId);
+        return new ResponseEntity<>(std, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{userId}/follower/desc")
+    public ResponseEntity followerDesc(@PathVariable("userId") Integer sellerId) {
+        List<FollowerInfoDTO> std = sellerService.getFollowersDesc(sellerId);
+        return new ResponseEntity<>(std, HttpStatus.CREATED);
     }
 
 

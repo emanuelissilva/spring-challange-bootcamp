@@ -36,7 +36,8 @@ public class SpringChallengeApplication {
 		user1.followSeller(seller2);
 		user1.followSeller(seller3);
 		user1.followSeller(seller4);
-		user2.followSeller(seller2);
+		user2.followSeller(seller3);
+		user2.followSeller(seller4);
 
 
 		viewerRepository.saveAll(viewers);

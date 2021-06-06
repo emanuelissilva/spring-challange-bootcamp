@@ -5,10 +5,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FollowedInfoDTO {
+public class FollowedInfoDTO{
     private long id;
     private String userName;
 
     public FollowedInfoDTO() {
     }
+
+
 }

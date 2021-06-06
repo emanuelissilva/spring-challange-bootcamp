@@ -1,6 +1,8 @@
 package com.bootcamp.Spring.challenge.service.impl;
 
+import com.bootcamp.Spring.challenge.dto.FollowerInfoDTO;
 import com.bootcamp.Spring.challenge.dto.ProductDTO;
+import com.bootcamp.Spring.challenge.dto.SellerDTO;
 import com.bootcamp.Spring.challenge.model.Product;
 import com.bootcamp.Spring.challenge.model.ProductDetail;
 import com.bootcamp.Spring.challenge.model.Seller;
@@ -11,8 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
