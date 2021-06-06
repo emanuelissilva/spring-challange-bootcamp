@@ -1,6 +1,7 @@
 package com.bootcamp.Spring.challenge.controller;
 
 import com.bootcamp.Spring.challenge.dto.ProductDTO;
+import com.bootcamp.Spring.challenge.dto.ProductPromoDTO;
 import com.bootcamp.Spring.challenge.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,12 @@ public class ProductController {
     @PostMapping("/product")
     public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductDTO productDTO) {
         ProductDTO std = productService.postProduct(productDTO);
+        return new ResponseEntity<>(std, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/productpromo")
+    public ResponseEntity<ProductPromoDTO> addProduct(@RequestBody ProductPromoDTO productDTO) {
+        ProductPromoDTO std = productService.postProductPromo(productDTO);
         return new ResponseEntity<>(std, HttpStatus.CREATED);
     }
 

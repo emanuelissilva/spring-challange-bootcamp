@@ -45,9 +45,22 @@ public class Product {
     @Column(name="productNotes")
     private String productNotes;
 
+    private Boolean hasPromo;
+
+    private Double discount;
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="seller_id")
     private Seller seller;
 
+    public Double setDiscount(Double discount) {
+        if(this.hasPromo){
+            this.discount=discount;
+        } else if(this.hasPromo==null){
+            this.discount=null;
+        } else
+        this.discount=0.0;
 
+        return this.discount;
+    }
 }

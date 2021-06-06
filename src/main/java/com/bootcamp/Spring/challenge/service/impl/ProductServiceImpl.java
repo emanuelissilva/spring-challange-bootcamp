@@ -2,6 +2,7 @@ package com.bootcamp.Spring.challenge.service.impl;
 
 import com.bootcamp.Spring.challenge.dto.FollowerInfoDTO;
 import com.bootcamp.Spring.challenge.dto.ProductDTO;
+import com.bootcamp.Spring.challenge.dto.ProductPromoDTO;
 import com.bootcamp.Spring.challenge.dto.SellerDTO;
 import com.bootcamp.Spring.challenge.model.Product;
 import com.bootcamp.Spring.challenge.model.ProductDetail;
@@ -32,6 +33,14 @@ public class ProductServiceImpl implements ProductService {
         return mapProductToProductDTO(savedProduct);
     }
 
+    @Override
+    @Transactional
+    public ProductPromoDTO postProductPromo(ProductPromoDTO productDTO) {
+        Product product = new Product();
+        mapPromoDTOToEntity(productDTO, product);
+        Product savedProduct = productRepository.save(product);
+        return mapProductToProductPromoDTO(savedProduct);
+    }
     private void mapDTOToEntity(ProductDTO productDTO, Product product) {
         product.setPostDate(productDTO.getPostDate());
         product.setPostId(productDTO.getPostId());
@@ -49,6 +58,27 @@ public class ProductServiceImpl implements ProductService {
         product.setProductColor(mapDTOdetailListtoProductDetail(productDTO).getProductColor());
         product.setProductColor(mapDTOdetailListtoProductDetail(productDTO).getProductColor());
         product.setProductNotes(mapDTOdetailListtoProductDetail(productDTO).getProductNotes());
+
+    }
+    private void mapPromoDTOToEntity(ProductPromoDTO productPromoDTO, Product product) {
+        product.setPostDate(productPromoDTO.getPostDate());
+        product.setPostId(productPromoDTO.getPostId());
+        product.setCategory(productPromoDTO.getCategory());
+        product.setPrice(productPromoDTO.getPrice());
+        product.setHasPromo(productPromoDTO.getHasPromo());
+        product.setDiscount(productPromoDTO.getDiscount());
+        product.setProductName(mapPromoDTOdetailListtoProductDetail(productPromoDTO).getProductName());
+        product.setProductId(mapPromoDTOdetailListtoProductDetail(productPromoDTO).getProductId());
+        if (null == product.getSeller()) {
+            product.setSeller(new Seller());
+        }
+        Seller seller = sellerRepository.findBySellerId(productPromoDTO.getSellerId());
+        product.setSeller(seller);
+        product.setProductBrand(mapPromoDTOdetailListtoProductDetail(productPromoDTO).getProductBrand());
+        product.setProductType(mapPromoDTOdetailListtoProductDetail(productPromoDTO).getProductType());
+        product.setProductColor(mapPromoDTOdetailListtoProductDetail(productPromoDTO).getProductColor());
+        product.setProductColor(mapPromoDTOdetailListtoProductDetail(productPromoDTO).getProductColor());
+        product.setProductNotes(mapPromoDTOdetailListtoProductDetail(productPromoDTO).getProductNotes());
 
     }
 
@@ -72,7 +102,42 @@ public class ProductServiceImpl implements ProductService {
         return productDTO;
     }
 
+    private ProductPromoDTO mapProductToProductPromoDTO(Product product) {
+        ProductPromoDTO productPromoDTO = new ProductPromoDTO();
+        productPromoDTO.setPostDate(product.getPostDate());
+        productPromoDTO.setPostId(product.getPostId());
+        productPromoDTO.setCategory(product.getCategory());
+        productPromoDTO.setPrice(product.getPrice());
+        productPromoDTO.setHasPromo(product.getHasPromo());
+        productPromoDTO.setDiscount(product.getDiscount());
+        productPromoDTO.setSellerId(product.getSeller().getSellerId());
+        Set<ProductDetail> list = new HashSet<>();
+        ProductDetail detail = new ProductDetail();
+        detail.setProductId(product.getProductId());
+        detail.setProductName(product.getProductName());
+        detail.setProductBrand(product.getProductBrand());
+        detail.setProductType(product.getProductType());
+        detail.setProductColor(product.getProductColor());
+        detail.setProductNotes(product.getProductNotes());
+        list.add(detail);
+        productPromoDTO.setDetail(list);
+        return productPromoDTO;
+    }
+
     private ProductDetail mapDTOdetailListtoProductDetail(ProductDTO productDTO){
+        ProductDetail details = new ProductDetail();
+        productDTO.getDetail().forEach(detail -> {
+            details.setProductId(detail.getProductId());
+            details.setProductBrand(detail.getProductBrand());
+            details.setProductName(detail.getProductName());
+            details.setProductType(detail.getProductType());
+            details.setProductColor(detail.getProductColor());
+            details.setProductNotes(detail.getProductNotes());
+        });
+        return details;
+    }
+
+    private ProductDetail mapPromoDTOdetailListtoProductDetail(ProductPromoDTO productDTO){
         ProductDetail details = new ProductDetail();
         productDTO.getDetail().forEach(detail -> {
             details.setProductId(detail.getProductId());

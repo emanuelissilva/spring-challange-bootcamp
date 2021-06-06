@@ -24,9 +24,21 @@ public class SellerController {
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }
 
+    @GetMapping("/{userId}/promo/count")
+    public ResponseEntity<CountPromoDTO> countPromo(@PathVariable("userId") Integer sellerId) {
+        CountPromoDTO seller = sellerService.countPromo(sellerId);
+        return new ResponseEntity<>(seller, HttpStatus.OK);
+    }
+
     @GetMapping("/{userId}/followers/list")
     public ResponseEntity<SellerDTO> getFollowers(@PathVariable("userId") Integer sellerId) {
         SellerDTO seller = sellerService.getFollowersList(sellerId);
+        return new ResponseEntity<>(seller, HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/productpromo/list")
+    public ResponseEntity<SellerPromoDTO> getProductPromo(@PathVariable("userId") Integer sellerId) {
+        SellerPromoDTO seller = sellerService.getProductPromolist(sellerId);
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }
 

@@ -25,6 +25,8 @@ public class Seller {
     //@Column(name="countFollowers")
     private Integer countFollowers;
 
+    private Integer countPromos;
+
     @ManyToMany(mappedBy="followedSellers")
     private Set<User> followers = new HashSet<>();
 

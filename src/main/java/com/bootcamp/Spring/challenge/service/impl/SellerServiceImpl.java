@@ -30,6 +30,20 @@ public class SellerServiceImpl implements SellerService {
 
     @Transactional
     @Override
+    public CountPromoDTO countPromo(Integer idSeller) {
+        Seller seller = sellerRepository.getOne(idSeller);
+        List<Product> list = new ArrayList<>();
+        seller.getProducts().forEach(product -> {
+            if(product.getHasPromo()){
+                list.add(product);
+            }
+        });
+        seller.setCountPromos(list.size());
+        return mapCountProductsToDTO(seller);
+    }
+
+    @Transactional
+    @Override
     public SellerDTO getFollowersList(Integer idSeller) {
         Seller seller = sellerRepository.getOne(idSeller);
         return mapEntityToDTO(seller);
@@ -40,6 +54,14 @@ public class SellerServiceImpl implements SellerService {
         Seller seller = sellerRepository.getOne(idSeller);
         return mapEntityProductToProductListDTO(seller);
     }
+
+
+    @Override
+    public SellerPromoDTO getProductPromolist(Integer idSeller) {
+        Seller seller = sellerRepository.getOne(idSeller);
+        return mapEntityProductToSellerPromoDTO(seller);
+    }
+
 
     @Override
     public SellerProductListDTO getProductDesc(Integer sellerId) {
@@ -97,6 +119,13 @@ public class SellerServiceImpl implements SellerService {
         return responseProductListDTO;
     }
 
+    private SellerPromoDTO mapEntityProductToSellerPromoDTO(Seller seller) {
+        SellerPromoDTO responsePromoDTO = new SellerPromoDTO();
+        responsePromoDTO.setSellerId(seller.getSellerId());
+        responsePromoDTO.setSellerName(seller.getSellerName());
+        responsePromoDTO.setProductPromoDTOS(mapProductToProductPromoDTO(seller.getProducts()));
+        return responsePromoDTO;
+    }
     private List<ProductDTO> mapProductToProductDTO(List<Product> product) {
         List<ProductDTO> productDTOList = new ArrayList<>();
         Set<ProductDetail> list = new HashSet<>();
@@ -121,12 +150,46 @@ public class SellerServiceImpl implements SellerService {
         return productDTOList;
     }
 
+    private List<ProductPromoDTO> mapProductToProductPromoDTO(List<Product> product) {
+        List<ProductPromoDTO> productPromoDTOList = new ArrayList<>();
+        Set<ProductDetail> list = new HashSet<>();
+        ProductDetail detail = new ProductDetail();
+        product.forEach(product1 -> {
+            detail.setProductId(product1.getProductId());
+            detail.setProductName(product1.getProductName());
+            detail.setProductBrand(product1.getProductBrand());
+            detail.setProductType(product1.getProductType());
+            detail.setProductColor(product1.getProductColor());
+            detail.setProductNotes(product1.getProductNotes());
+            ProductPromoDTO productPromoDTO = new ProductPromoDTO();
+            productPromoDTO.setPostDate(product1.getPostDate());
+            productPromoDTO.setPostId(product1.getPostId());
+            productPromoDTO.setCategory(product1.getCategory());
+            productPromoDTO.setPrice(product1.getPrice());
+            productPromoDTO.setSellerId(product1.getSeller().getSellerId());
+            productPromoDTO.setHasPromo(product1.getHasPromo());
+            productPromoDTO.setDiscount(product1.getDiscount());
+            list.add(detail);
+            productPromoDTO.setDetail(list);
+            productPromoDTOList.add(productPromoDTO);
+        });
+        return productPromoDTOList;
+    }
+
 
     private CountFollowsDTO mapToDTO(Seller seller) {
         CountFollowsDTO responseDTO = new CountFollowsDTO();
         responseDTO.setSellerName(seller.getSellerName());
         responseDTO.setId(seller.getSellerId());
         responseDTO.setCountFollowers(seller.getCountFollowers());
+        return responseDTO;
+    }
+
+    private CountPromoDTO mapCountProductsToDTO(Seller seller) {
+        CountPromoDTO responseDTO = new CountPromoDTO();
+        responseDTO.setSellerName(seller.getSellerName());
+        responseDTO.setId(seller.getSellerId());
+        responseDTO.setCountPromos(seller.getCountPromos());
         return responseDTO;
     }
 
