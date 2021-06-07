@@ -11,5 +11,5 @@ import java.util.List;
 public class SellerFollowSellerDTO {
     private Integer sellerId;
     private String sellerName;
-    private List<FollowedSellerInfoDTO> followedSellers = new ArrayList<>();
+    private List<FollowedSellerInfoDTO> followed = new ArrayList<>();
 }

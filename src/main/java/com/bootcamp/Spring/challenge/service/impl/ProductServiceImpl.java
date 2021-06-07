@@ -34,14 +34,19 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductPromoDTO postProductPromo(ProductPromoDTO productDTO) {
+        ProductPromoDTO no = new ProductPromoDTO();
         Product product = new Product();
-        mapPromoDTOToEntity(productDTO, product);
-        Product savedProduct = productRepository.save(product);
-        return mapProductToProductPromoDTO(savedProduct);
+        if(productDTO.getHasPromo()){
+            mapPromoDTOToEntity(productDTO, product);
+            Product savedProduct = productRepository.save(product);
+            return mapProductToProductPromoDTO(savedProduct);
+        }
+        else return no;
     }
+
     private void mapDTOToEntity(ProductDTO productDTO, Product product) {
-        product.setPostDate(productDTO.getPostDate());
-        product.setPostId(productDTO.getPostId());
+        product.setDate(productDTO.getDate());
+        product.setId_post(productDTO.getId_post());
         product.setCategory(productDTO.getCategory());
         product.setPrice(productDTO.getPrice());
         product.setProductName(mapDTOdetailListtoProductDetail(productDTO).getProductName());
@@ -59,8 +64,8 @@ public class ProductServiceImpl implements ProductService {
 
     }
     private void mapPromoDTOToEntity(ProductPromoDTO productPromoDTO, Product product) {
-        product.setPostDate(productPromoDTO.getPostDate());
-        product.setPostId(productPromoDTO.getPostId());
+        product.setDate(productPromoDTO.getDate());
+        product.setId_post(productPromoDTO.getId_post());
         product.setCategory(productPromoDTO.getCategory());
         product.setPrice(productPromoDTO.getPrice());
         product.setHasPromo(productPromoDTO.getHasPromo());
@@ -82,8 +87,8 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductDTO mapProductToProductDTO(Product product) {
         ProductDTO productDTO = new ProductDTO();
-        productDTO.setPostDate(product.getPostDate());
-        productDTO.setPostId(product.getPostId());
+        productDTO.setDate(product.getDate());
+        productDTO.setId_post(product.getId_post());
         productDTO.setCategory(product.getCategory());
         productDTO.setPrice(product.getPrice());
         productDTO.setSellerId(product.getSeller().getSellerId());
@@ -102,8 +107,8 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductPromoDTO mapProductToProductPromoDTO(Product product) {
         ProductPromoDTO productPromoDTO = new ProductPromoDTO();
-        productPromoDTO.setPostDate(product.getPostDate());
-        productPromoDTO.setPostId(product.getPostId());
+        productPromoDTO.setDate(product.getDate());
+        productPromoDTO.setId_post(product.getId_post());
         productPromoDTO.setCategory(product.getCategory());
         productPromoDTO.setPrice(product.getPrice());
         productPromoDTO.setHasPromo(product.getHasPromo());

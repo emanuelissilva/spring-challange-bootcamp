@@ -18,8 +18,8 @@ public class Seller {
     @SequenceGenerator(name = "seller_sequence", sequenceName = "seller_sequence")
     private Integer sellerId;
     private String sellerName;
-    private Integer countFollowers;
-    private Integer countPromos;
+    private Integer followers_count;
+    private Integer countPromos=0;
 
     @ManyToMany(mappedBy="followedSellers")
     private Set<User> followers = new HashSet<>();
@@ -42,7 +42,7 @@ public class Seller {
         if(this.getSellerId()==seller.getSellerId()){
             System.out.println("A seller can't follow himself");
         } else
-        this.followed.add(seller);
+            this.followed.add(seller);
         seller.getFollowedSellers().add(this);
     }
 
@@ -65,11 +65,13 @@ public class Seller {
     }
 
     public Integer getCountPromos() {
+        final Integer[] countPromo = {0};
         this.products.forEach(product -> {
             if(product.getHasPromo()){
-                this.countPromos++;
-            }else this.countPromos=0;
+                countPromo[0]++;
+            }else if (product.getHasPromo()==null)
+                countPromo[0]=countPromo[0];
         });
-        return this.countPromos;
+        return this.countPromos=countPromo[0];
     }
 }

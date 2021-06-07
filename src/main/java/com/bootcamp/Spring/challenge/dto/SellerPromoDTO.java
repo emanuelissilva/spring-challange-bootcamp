@@ -11,5 +11,5 @@ import java.util.List;
 public class SellerPromoDTO {
     private Integer sellerId;
     private String sellerName;
-    private List<ProductPromoDTO> productPromoDTOS = new ArrayList<>();
+    private List<ProductPromoDTO> posts = new ArrayList<>();
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -45,21 +46,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<FollowedInfoDTO> getFollowedSellerAsc(Integer userId) {
+    public UserFollowedListDTO getFollowedSellerAsc(Integer userId) {
         User response = userRepository.getOne(userId);
         UserFollowedListDTO list = mapUserFollowedListToDTO(response);
-        List<FollowedInfoDTO> list1 = list.getFollowedSellers();
-        Collections.sort(list1, Comparator.comparing(FollowedInfoDTO::getUserName));
-        return list1;
+        Collections.sort(list.getFollowed(), Comparator.comparing(FollowedInfoDTO::getSellerName));
+        return list;
     }
 
     @Override
-    public List<FollowedInfoDTO> getFollowedSellerDesc(Integer userId) {
+    public UserFollowedListDTO getFollowedSellerDesc(Integer userId) {
         User response = userRepository.getOne(userId);
         UserFollowedListDTO list = mapUserFollowedListToDTO(response);
-        List<FollowedInfoDTO> list1 = list.getFollowedSellers();
-        Collections.sort(list1, Comparator.comparing(FollowedInfoDTO::getUserName).reversed());
-        return list1;
+        Collections.sort(list.getFollowed(), Comparator.comparing(FollowedInfoDTO::getSellerName).reversed());
+        return list;
     }
 
     @Transactional
@@ -92,12 +91,47 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserFollowedProductListDTO getProductList(Integer idSeller) {
         UserFollowedProductListDTO user = new UserFollowedProductListDTO();
+        UserFollowedProductListDTO user2 = new UserFollowedProductListDTO();
+        List<ProductDTO> posts = new ArrayList<>();
         User user1 = userRepository.getOne(idSeller);
         user.setUserName(user1.getUserName());
-        user.setId(user1.getUserID());
+        user.setUserId(user1.getUserID());
         user1.getFollowedSellers().forEach(seller -> {
-            user.setProducts(mapProductToProductDTO(seller.getProducts()));
+            user2.setPosts(mapProductToProductDTO(seller.getProducts()));
         });
+        user2.getPosts().forEach(post -> {
+            if(post.getDate().isBefore( LocalDate.now()) && post.getDate().isAfter(LocalDate.now().minusWeeks(2))){
+                posts.add(post);
+            }
+        });
+        user.setPosts(posts);
+        Collections.sort(user.getPosts(), Comparator.comparing(ProductDTO::getDate).reversed());
+        return user;
+    }
+
+    @Override
+    public UserFollowedProductListDTO getProductDesc(Integer sellerId) {
+        UserFollowedProductListDTO user = new UserFollowedProductListDTO();
+        User user1 = userRepository.getOne(sellerId);
+        user.setUserName(user1.getUserName());
+        user.setUserId(user1.getUserID());
+        user1.getFollowedSellers().forEach(seller -> {
+            user.setPosts(mapProductToProductDTO(seller.getProducts()));
+        });
+        Collections.sort(user.getPosts(), Comparator.comparing(ProductDTO::getDate).reversed());
+        return user;
+    }
+
+    @Override
+    public UserFollowedProductListDTO getProductAsc(Integer sellerId) {
+        UserFollowedProductListDTO user = new UserFollowedProductListDTO();
+        User user1 = userRepository.getOne(sellerId);
+        user.setUserName(user1.getUserName());
+        user.setUserId(user1.getUserID());
+        user1.getFollowedSellers().forEach(seller -> {
+            user.setPosts(mapProductToProductDTO(seller.getProducts()));
+        });
+        Collections.sort(user.getPosts(), Comparator.comparing(ProductDTO::getDate));
         return user;
     }
 
@@ -113,8 +147,8 @@ public class UserServiceImpl implements UserService {
             detail.setProductColor(product1.getProductColor());
             detail.setProductNotes(product1.getProductNotes());
             ProductDTO productDTO = new ProductDTO();
-            productDTO.setPostDate(product1.getPostDate());
-            productDTO.setPostId(product1.getPostId());
+            productDTO.setDate(product1.getDate());
+            productDTO.setId_post(product1.getId_post());
             productDTO.setCategory(product1.getCategory());
             productDTO.setPrice(product1.getPrice());
             productDTO.setSellerId(product1.getSeller().getSellerId());
@@ -156,8 +190,8 @@ public class UserServiceImpl implements UserService {
     private UserFollowedListDTO mapUserFollowedListToDTO(User user) {
         UserFollowedListDTO responseDTO = new UserFollowedListDTO();
         responseDTO.setUserName(user.getUserName());
-        responseDTO.setId(user.getUserID());
-        responseDTO.setFollowedSellers(mapFollowed(user.getFollowedSellers()));
+        responseDTO.setUserId(user.getUserID());
+        responseDTO.setFollowed(mapFollowed(user.getFollowedSellers()));
         return responseDTO;
     }
 
@@ -165,8 +199,8 @@ public class UserServiceImpl implements UserService {
         List<FollowedInfoDTO> list = new ArrayList<>();
         followedList.forEach(followed -> {
             FollowedInfoDTO followedListFinal = new FollowedInfoDTO();
-            followedListFinal.setUserName(followed.getSellerName());
-            followedListFinal.setId(followed.getSellerId());
+            followedListFinal.setSellerName(followed.getSellerName());
+            followedListFinal.setSellerId(followed.getSellerId());
             list.add(followedListFinal);
         });
         return list;

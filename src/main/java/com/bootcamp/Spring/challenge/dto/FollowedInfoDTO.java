@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FollowedInfoDTO{
-    private long id;
-    private String userName;
+    private long sellerId;
+    private String sellerName;
 
     public FollowedInfoDTO() {
     }

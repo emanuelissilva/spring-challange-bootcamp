@@ -20,6 +20,6 @@ public interface SellerService {
     public SellerDTO getFollowersDesc(Integer idSeller);
     public SellerFollowSellerDTO getFollowedAsc(Integer idSeller);
     public SellerFollowSellerDTO getFollowedDesc(Integer idSeller);
-    public SellerProductListDTO getProductDesc(Integer sellerId);
-    public SellerProductListDTO getProductAsc(Integer sellerId);
+    public SellerFollowedProductListDTO getProductDesc(Integer sellerId);
+    public SellerFollowedProductListDTO getProductAsc(Integer sellerId);
 }

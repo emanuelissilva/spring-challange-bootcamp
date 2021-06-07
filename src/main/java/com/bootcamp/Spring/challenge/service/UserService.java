@@ -1,6 +1,6 @@
 package com.bootcamp.Spring.challenge.service;
 
-import com.bootcamp.Spring.challenge.dto.FollowedInfoDTO;
+import com.bootcamp.Spring.challenge.dto.SellerFollowedProductListDTO;
 import com.bootcamp.Spring.challenge.dto.UserDTO;
 import com.bootcamp.Spring.challenge.dto.UserFollowedListDTO;
 import com.bootcamp.Spring.challenge.dto.UserFollowedProductListDTO;
@@ -13,7 +13,9 @@ public interface UserService {
     public UserDTO followSeller(Integer idUser, Integer idSeller);
     public UserDTO unfollowSeller(Integer userId, Integer sellerId);
     public UserFollowedListDTO getUserById(Integer idUser);
-    public List<FollowedInfoDTO> getFollowedSellerAsc(Integer userId);
-    public List<FollowedInfoDTO> getFollowedSellerDesc(Integer userId);
+    public UserFollowedListDTO getFollowedSellerAsc(Integer userId);
+    public UserFollowedListDTO getFollowedSellerDesc(Integer userId);
     public UserFollowedProductListDTO getProductList(Integer userId);
+    public UserFollowedProductListDTO getProductDesc(Integer sellerId);
+    public UserFollowedProductListDTO getProductAsc(Integer sellerId);
 }

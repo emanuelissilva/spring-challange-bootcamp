@@ -22,7 +22,7 @@ public class User {
 
     @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinTable(
-        name="followed_sellers",
+        name="user_follows_sellers",
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name="seller_id")
     )

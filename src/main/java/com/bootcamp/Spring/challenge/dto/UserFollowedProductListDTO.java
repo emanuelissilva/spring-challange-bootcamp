@@ -9,11 +9,11 @@ import java.util.List;
 @Getter
 @Setter
 public class UserFollowedProductListDTO {
-    private long id;
+    private long userId;
     private String userName;
-    private List<ProductDTO> products = new ArrayList<>();
+    private List<ProductDTO> posts = new ArrayList<>();
 
-    public void setProducts(List<ProductDTO> products) {
-        this.products.addAll(products);
+    public void setPosts(List<ProductDTO> posts) {
+        this.posts.addAll(posts);
     }
 }

@@ -10,15 +10,15 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
-@Table(name = "product")
+@Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seller_sequence")
     @SequenceGenerator(name = "seller_sequence", sequenceName = "seller_sequence")
-    private Integer postId;
+    private Integer id_post;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate postDate;
+    private LocalDate date;
 
     private Integer category;
 

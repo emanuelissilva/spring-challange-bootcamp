@@ -13,9 +13,9 @@ import java.util.Set;
 @Setter
 public class ProductPromoDTO {
     private Integer sellerId;
-    private Integer postId;
+    private Integer id_post;
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate postDate;
+    private LocalDate date;
     private Set<ProductDetail> detail = new HashSet<>();
     private Integer category;
     private Double price;
