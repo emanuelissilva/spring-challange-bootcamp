@@ -33,12 +33,18 @@ public class SellerController {
     @PostMapping("/sellers/{sellerId}/follow/{sellerIdToFollow}")
     public ResponseEntity follow(@PathVariable("sellerId") Integer followerId, @PathVariable("sellerIdToFollow") Integer followedId) {
         SellerFollowSellerDTO std = sellerService.followSeller(followerId, followedId);
+        if(followedId==followedId){
+            return new ResponseEntity<>("A seller can't follow himself!", HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>("The seller"+followerId+" has followed seller"+followedId+"!", HttpStatus.OK);
     }
 
     @PostMapping("/sellers/{sellerId}/unfollow/{sellerIdToUnfollow}")
     public ResponseEntity unfollow(@PathVariable("sellerId") Integer followerId, @PathVariable("sellerIdToUnfollow") Integer followedId) {
         SellerFollowSellerDTO std = sellerService.unfollowSeller(followerId, followedId);
+        if(followedId==followedId){
+            return new ResponseEntity<>("A seller can't unfollow himself!", HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>("The seller"+followerId+" has unfollowed seller"+followedId+"!", HttpStatus.OK);
     }
 

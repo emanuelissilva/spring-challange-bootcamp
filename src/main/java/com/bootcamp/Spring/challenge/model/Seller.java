@@ -47,7 +47,10 @@ public class Seller {
     }
 
     public void unfollowSeller(Seller seller) {
-        this.followed.remove(seller);
+        if(this.getSellerId()==seller.getSellerId()){
+            System.out.println("A seller can't unfollow himself");
+        } else
+            this.followed.remove(seller);
         seller.getFollowedSellers().remove(this);
     }
 
