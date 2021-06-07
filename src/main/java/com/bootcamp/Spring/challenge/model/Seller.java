@@ -39,18 +39,12 @@ public class Seller {
     private Set<Seller> followed = new HashSet<>();
 
     public void followSeller(Seller seller){
-        if(this.getSellerId()==seller.getSellerId()){
-            System.out.println("A seller can't follow himself");
-        } else
-            this.followed.add(seller);
+        this.followed.add(seller);
         seller.getFollowedSellers().add(this);
     }
 
     public void unfollowSeller(Seller seller) {
-        if(this.getSellerId()==seller.getSellerId()){
-            System.out.println("A seller can't unfollow himself");
-        } else
-            this.followed.remove(seller);
+        this.followed.remove(seller);
         seller.getFollowedSellers().remove(this);
     }
 

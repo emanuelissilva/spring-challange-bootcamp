@@ -5,7 +5,7 @@ import com.bootcamp.Spring.challenge.dto.*;
 import java.util.List;
 
 public interface SellerService {
-    public SellerDTO addSeller(SellerDTO sellerDto);
+    public SellerNewDTO addSeller(SellerNewDTO sellerDto);
     public List<SellerDTO> getAllSellers();
     public SellerFollowSellerDTO followSeller(Integer idFollowSeller, Integer idSeller);
     public SellerFollowSellerDTO unfollowSeller(Integer idFollowSeller, Integer sellerId);

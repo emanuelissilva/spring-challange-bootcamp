@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 public class UserFollowedProductListDTO {
-    private long userId;
+    private Integer userId;
     private String userName;
     private List<ProductDTO> posts = new ArrayList<>();
 

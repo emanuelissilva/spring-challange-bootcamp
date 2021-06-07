@@ -27,11 +27,11 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserDTO addUser(UserDTO userDTO) {
+    public UserNewDTO addUser(UserNewDTO userDTO) {
         User user = new User();
-        mapDTOToEntity(userDTO, user);
+        mapNewDTOToEntity(userDTO, user);
         User savedUser = userRepository.save(user);
-        return mapEntityToDTO(savedUser);
+        return mapEntityToNewDTO(savedUser);
     }
 
     @Override
@@ -95,13 +95,11 @@ public class UserServiceImpl implements UserService {
     public UserFollowedProductListDTO getProductList(Integer idSeller, String order) {
         if (order.equals("date_asc")){
             return getProductAsc(idSeller);
-        } else if (order.equals("date_desc")){
-            return getProductDesc(idSeller);
         } else
-            return getProductListWithoutSort(idSeller);
+            return getProductListDesc(idSeller);
     }
 
-    public UserFollowedProductListDTO getProductListWithoutSort(Integer idSeller) {
+    public UserFollowedProductListDTO getProductListDesc(Integer idSeller) {
         UserFollowedProductListDTO user = new UserFollowedProductListDTO();
         UserFollowedProductListDTO user2 = new UserFollowedProductListDTO();
         List<ProductDTO> posts = new ArrayList<>();
@@ -121,28 +119,22 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-
-
-    public UserFollowedProductListDTO getProductDesc(Integer sellerId) {
-        UserFollowedProductListDTO user = new UserFollowedProductListDTO();
-        User user1 = userRepository.getOne(sellerId);
-        user.setUserName(user1.getUserName());
-        user.setUserId(user1.getUserID());
-        user1.getFollowedSellers().forEach(seller -> {
-            user.setPosts(mapProductToProductDTO(seller.getProducts()));
-        });
-        Collections.sort(user.getPosts(), Comparator.comparing(ProductDTO::getDate).reversed());
-        return user;
-    }
-
     public UserFollowedProductListDTO getProductAsc(Integer sellerId) {
         UserFollowedProductListDTO user = new UserFollowedProductListDTO();
+        UserFollowedProductListDTO user2 = new UserFollowedProductListDTO();
+        List<ProductDTO> posts = new ArrayList<>();
         User user1 = userRepository.getOne(sellerId);
         user.setUserName(user1.getUserName());
         user.setUserId(user1.getUserID());
         user1.getFollowedSellers().forEach(seller -> {
-            user.setPosts(mapProductToProductDTO(seller.getProducts()));
+            user2.setPosts(mapProductToProductDTO(seller.getProducts()));
         });
+        user2.getPosts().forEach(post -> {
+            if(post.getDate().isBefore( LocalDate.now()) && post.getDate().isAfter(LocalDate.now().minusWeeks(2))){
+                posts.add(post);
+            }
+        });
+        user.setPosts(posts);
         Collections.sort(user.getPosts(), Comparator.comparing(ProductDTO::getDate));
         return user;
     }
@@ -176,7 +168,7 @@ public class UserServiceImpl implements UserService {
         if (null == user.getFollowedSellers()) {
             user.setFollowedSellers(new HashSet<>());
         }
-        userDTO.getFollowedSellers().stream().forEach(followedSeller -> {
+        userDTO.getFollowed().stream().forEach(followedSeller -> {
             Seller seller = sellerRepository.findBySellerName(followedSeller);
             if (null == seller) {
                 seller = new Seller();
@@ -187,11 +179,22 @@ public class UserServiceImpl implements UserService {
         });
     }
 
+    private void mapNewDTOToEntity(UserNewDTO userDTO, User user) {
+        user.setUserName(userDTO.getUserName());
+        user.setUserID(userDTO.getUserId());
+    }
+
+    private UserNewDTO mapEntityToNewDTO(User user) {
+        UserNewDTO responseDTO = new UserNewDTO();
+        responseDTO.setUserName(user.getUserName());
+        responseDTO.setUserId(user.getUserID());
+        return responseDTO;
+    }
     private UserDTO mapEntityToDTO(User user) {
         UserDTO responseDTO = new UserDTO();
         responseDTO.setUserName(user.getUserName());
-        responseDTO.setId(user.getUserID());
-        responseDTO.setFollowedSellers(user.getFollowedSellers()
+        responseDTO.setUserId(user.getUserID());
+        responseDTO.setFollowed(user.getFollowedSellers()
                 .stream()
                 .map(Seller::getSellerName)
                 .sorted()

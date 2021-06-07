@@ -7,7 +7,6 @@ import com.bootcamp.Spring.challenge.model.Seller;
 import com.bootcamp.Spring.challenge.model.User;
 import com.bootcamp.Spring.challenge.repositories.SellerRepository;
 import com.bootcamp.Spring.challenge.service.SellerService;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,11 +22,11 @@ public class SellerServiceImpl implements SellerService {
 
     @Transactional
     @Override
-    public SellerDTO addSeller(SellerDTO sellerDTO) {
+    public SellerNewDTO addSeller(SellerNewDTO sellerDTO) {
         Seller seller = new Seller();
-        mapDTOToEntity(sellerDTO, seller);
+        mapNewDTOToEntity(sellerDTO, seller);
         Seller savedSeller = sellerRepository.save(seller);
-        return mapSellerEntityToSellerDTO(savedSeller);
+        return mapSellerEntityToNewSellerDTO(savedSeller);
     }
 
     @Override
@@ -83,9 +82,8 @@ public class SellerServiceImpl implements SellerService {
         if (order.equals("name_asc")){
             return getFollowersAsc(idSeller);
         } else if (order.equals("name_desc"))
-        {
             return getFollowersDesc(idSeller);
-        } else
+        else
         return mapSellerEntityToSellerDTO(seller);
     }
 
@@ -112,14 +110,11 @@ public class SellerServiceImpl implements SellerService {
     public SellerFollowedProductListDTO getProductFollowedList(Integer idSeller, String order) {
         if (order.equals("date_asc")){
             return getProductAsc(idSeller);
-        } else if (order.equals("date_desc"))
-        {
-            return getProductDesc(idSeller);
         } else
-            return getProductFollowedListWithoutSort(idSeller);
+            return getProductFollowedListDesc(idSeller);
     }
 
-    public SellerFollowedProductListDTO getProductFollowedListWithoutSort(Integer idSeller) {
+    public SellerFollowedProductListDTO getProductFollowedListDesc(Integer idSeller) {
         SellerFollowedProductListDTO user = new SellerFollowedProductListDTO();
         SellerFollowedProductListDTO user2 = new SellerFollowedProductListDTO();
         List<ProductDTO> posts = new ArrayList<>();
@@ -145,27 +140,22 @@ public class SellerServiceImpl implements SellerService {
         return mapEntityProductToSellerPromoDTO(seller);
     }
 
-
-    public SellerFollowedProductListDTO getProductDesc(Integer sellerId) {
-        Seller response = sellerRepository.getOne(sellerId);
-        SellerFollowedProductListDTO user = new SellerFollowedProductListDTO();
-        user.setSellerName(response.getSellerName());
-        user.setSellerId(response.getSellerId());
-        response.getFollowedSellers().forEach(seller -> {
-            user.setPosts(mapProductToProductDTO(seller.getProducts()));
-        });
-        Collections.sort(user.getPosts(), Comparator.comparing(ProductDTO::getDate).reversed());
-        return user;
-    }
-
     public SellerFollowedProductListDTO getProductAsc(Integer sellerId) {
-        Seller response = sellerRepository.getOne(sellerId);
         SellerFollowedProductListDTO user = new SellerFollowedProductListDTO();
-        user.setSellerName(response.getSellerName());
-        user.setSellerId(response.getSellerId());
-        response.getFollowedSellers().forEach(seller -> {
-            user.setPosts(mapProductToProductDTO(seller.getProducts()));
+        SellerFollowedProductListDTO user2 = new SellerFollowedProductListDTO();
+        List<ProductDTO> posts = new ArrayList<>();
+        Seller seller1 = sellerRepository.getOne(sellerId);
+        user.setSellerName(seller1.getSellerName());
+        user.setSellerId(seller1.getSellerId());
+        seller1.getFollowedSellers().forEach(seller -> {
+            user2.setPosts(mapProductToProductDTO(seller.getProducts()));
         });
+        user2.getPosts().forEach(post -> {
+            if(post.getDate().isBefore( LocalDate.now()) && post.getDate().isAfter(LocalDate.now().minusWeeks(2))){
+                posts.add(post);
+            }
+        });
+        user.setPosts(posts);
         Collections.sort(user.getPosts(), Comparator.comparing(ProductDTO::getDate));
         return user;
     }
@@ -208,6 +198,13 @@ public class SellerServiceImpl implements SellerService {
         responseDTO.setSellerId(seller.getSellerId());
         responseDTO.setFollowers(mapFollowers(seller.getFollowers()));
         responseDTO.setFollowersSeller(mapFollowersSeller(seller.getFollowersSellers()));
+        return responseDTO;
+    }
+
+    private SellerNewDTO mapSellerEntityToNewSellerDTO(Seller seller) {
+        SellerNewDTO responseDTO = new SellerNewDTO();
+        responseDTO.setSellerName(seller.getSellerName());
+        responseDTO.setSellerId(seller.getSellerId());
         return responseDTO;
     }
 
@@ -291,27 +288,16 @@ public class SellerServiceImpl implements SellerService {
         return responseDTO;
     }
 
-    private void mapDTOToEntity(SellerDTO sellerDTO, Seller seller1) {
+    private void mapNewDTOToEntity(SellerNewDTO sellerDTO, Seller seller1) {
         seller1.setSellerName(sellerDTO.getSellerName());
-        if (null == seller1.getFollowedSellers()) {
-            seller1.setFollowedSellers(new HashSet<>());
-        }
-        sellerDTO.getFollowers().stream().forEach(follower -> {
-            Seller seller = sellerRepository.findBySellerName(follower.getUserName());
-            if (null == seller) {
-                seller = new Seller();
-                seller.setSellerName(new String());
-            }
-            seller.setSellerName(follower.getUserName());
-            seller.followSeller(seller);
-        });
+        seller1.setSellerId(sellerDTO.getSellerId());
     }
 
     private CountPromoDTO mapCountProductsToDTO(Seller seller) {
         CountPromoDTO responseDTO = new CountPromoDTO();
         responseDTO.setSellerName(seller.getSellerName());
-        responseDTO.setId(seller.getSellerId());
-        responseDTO.setCountPromos(seller.getCountPromos());
+        responseDTO.setSellerId(seller.getSellerId());
+        responseDTO.setPromoproducts_count(seller.getCountPromos());
         return responseDTO;
     }
 

@@ -1,7 +1,9 @@
 package com.bootcamp.Spring.challenge.controller;
 
 import com.bootcamp.Spring.challenge.dto.*;
+import com.bootcamp.Spring.challenge.repositories.SellerRepository;
 import com.bootcamp.Spring.challenge.service.SellerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,9 @@ public class SellerController {
         this.sellerService = sellerService;
     }
 
+    @Autowired
+    private SellerRepository sellerRepository;
+
     @GetMapping("/sellers")
     public ResponseEntity<List<SellerDTO>> getAllSellers() {
         List<SellerDTO> sellers = sellerService.getAllSellers();
@@ -25,37 +30,51 @@ public class SellerController {
     }
 
     @PostMapping("/sellers")
-    public ResponseEntity<SellerDTO> addNewSeller(@RequestBody SellerDTO sellerDTO) {
-        SellerDTO std = sellerService.addSeller(sellerDTO);
+    public ResponseEntity<SellerNewDTO> addNewSeller(@RequestBody SellerNewDTO sellerDTO) {
+        SellerNewDTO std = sellerService.addSeller(sellerDTO);
         return new ResponseEntity<>(std, HttpStatus.OK);
     }
 
     @PostMapping("/sellers/{sellerId}/follow/{sellerIdToFollow}")
     public ResponseEntity follow(@PathVariable("sellerId") Integer followerId, @PathVariable("sellerIdToFollow") Integer followedId) {
-        SellerFollowSellerDTO std = sellerService.followSeller(followerId, followedId);
-        if(followedId==followedId){
+        if(followerId==followedId)
             return new ResponseEntity<>("A seller can't follow himself!", HttpStatus.BAD_REQUEST);
+        else if ((!sellerRepository.existsById(followerId)) && (!sellerRepository.existsById(followedId)))
+            return new ResponseEntity<>("Both sellers doesn't exists! Try another Id", HttpStatus.BAD_REQUEST);
+        else if (!sellerRepository.existsById(followerId))
+            return new ResponseEntity<>("The follower seller doesn't exists! Try another Id", HttpStatus.BAD_REQUEST);
+        else if (!sellerRepository.existsById(followedId))
+            return new ResponseEntity<>("The followed seller doesn't exists! Try another Id", HttpStatus.BAD_REQUEST);
+        else {
+            SellerFollowSellerDTO std = sellerService.followSeller(followedId, followedId);
+            return new ResponseEntity<>("The seller "+followerId+" has followed seller "+followedId+"!", HttpStatus.OK);
         }
-        return new ResponseEntity<>("The seller"+followerId+" has followed seller"+followedId+"!", HttpStatus.OK);
     }
 
     @PostMapping("/sellers/{sellerId}/unfollow/{sellerIdToUnfollow}")
     public ResponseEntity unfollow(@PathVariable("sellerId") Integer followerId, @PathVariable("sellerIdToUnfollow") Integer followedId) {
-        SellerFollowSellerDTO std = sellerService.unfollowSeller(followerId, followedId);
-        if(followedId==followedId){
+        if(followerId==followedId)
             return new ResponseEntity<>("A seller can't unfollow himself!", HttpStatus.BAD_REQUEST);
+        else if ((!sellerRepository.existsById(followerId)) && (!sellerRepository.existsById(followedId)))
+            return new ResponseEntity<>("Both sellers doesn't exists! Try another Id", HttpStatus.BAD_REQUEST);
+        else if (!sellerRepository.existsById(followerId))
+            return new ResponseEntity<>("The follower seller doesn't exists! Try another Id", HttpStatus.BAD_REQUEST);
+        else if (!sellerRepository.existsById(followedId))
+            return new ResponseEntity<>("The followed seller doesn't exists! Try another Id", HttpStatus.BAD_REQUEST);
+        else {
+            SellerFollowSellerDTO std = sellerService.unfollowSeller(followedId, followedId);
+            return new ResponseEntity<>("The seller "+followerId+" has unfollowed seller "+followedId+"!", HttpStatus.OK);
         }
-        return new ResponseEntity<>("The seller"+followerId+" has unfollowed seller"+followedId+"!", HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/followers/count")
-    public ResponseEntity<CountFollowsDTO> countFollowers(@PathVariable("userId") Integer sellerId) {
+    @GetMapping("/{sellerId}/followers/count")
+    public ResponseEntity<CountFollowsDTO> countFollowers(@PathVariable("sellerId") Integer sellerId) {
         CountFollowsDTO seller = sellerService.countFollowers(sellerId);
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/followers/list")
-    public ResponseEntity<SellerDTO> getFollowers(@PathVariable("userId") Integer sellerId,
+    @GetMapping("/{sellerId}/followers/list")
+    public ResponseEntity<SellerDTO> getFollowers(@PathVariable("sellerId") Integer sellerId,
                                                   @RequestParam(name = "order",
                                                   required = false,
                                                   defaultValue = "")
@@ -64,8 +83,8 @@ public class SellerController {
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }
 
-    @GetMapping("/sellers/{userId}/followed/list")
-    public ResponseEntity<SellerFollowSellerDTO> getFollowed(@PathVariable("userId") Integer sellerId,
+    @GetMapping("/sellers/{sellerId}/followed/list")
+    public ResponseEntity<SellerFollowSellerDTO> getFollowed(@PathVariable("sellerId") Integer sellerId,
                                                              @RequestParam(name = "order",
                                                              required = false,
                                                              defaultValue = "")
@@ -74,8 +93,8 @@ public class SellerController {
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }
 
-    @GetMapping("/sellers/products/followed/{userId}/list")
-    public ResponseEntity<SellerFollowedProductListDTO> getProductsFollowed(@PathVariable("userId") Integer sellerId,
+    @GetMapping("/sellers/products/followed/{sellerId}/list")
+    public ResponseEntity<SellerFollowedProductListDTO> getProductsFollowed(@PathVariable("sellerId") Integer sellerId,
                                                                             @RequestParam(name = "order",
                                                                             required = false,
                                                                             defaultValue = "")
@@ -84,20 +103,20 @@ public class SellerController {
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }
 
-    @GetMapping("/products/{userId}/list")
-    public ResponseEntity<SellerProductListDTO> getProducts(@PathVariable("userId") Integer sellerId) {
+    @GetMapping("/products/{sellerId}/list")
+    public ResponseEntity<SellerProductListDTO> getProducts(@PathVariable("sellerId") Integer sellerId) {
         SellerProductListDTO seller = sellerService.getProductlist(sellerId);
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }
 
-    @GetMapping("/products/{userId}/countpromo")
-    public ResponseEntity<CountPromoDTO> countPromo(@PathVariable("userId") Integer sellerId) {
+    @GetMapping("/products/{sellerId}/countpromo")
+    public ResponseEntity<CountPromoDTO> countPromo(@PathVariable("sellerId") Integer sellerId) {
         CountPromoDTO seller = sellerService.countPromo(sellerId);
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }
 
-    @GetMapping("/products/{userId}/promo/list")
-    public ResponseEntity<SellerPromoDTO> getProductPromo(@PathVariable("userId") Integer sellerId) {
+    @GetMapping("/products/{sellerId}/promo/list")
+    public ResponseEntity<SellerPromoDTO> getProductPromo(@PathVariable("sellerId") Integer sellerId) {
         SellerPromoDTO seller = sellerService.getProductPromolist(sellerId);
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }

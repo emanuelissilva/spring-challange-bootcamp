@@ -21,15 +21,15 @@ public class ProductController {
     }
 
     @PostMapping("/products/newpost")
-    public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductDTO productDTO) {
+    public ResponseEntity<?> addProduct(@RequestBody ProductDTO productDTO) {
         ProductDTO std = productService.postProduct(productDTO);
-        return new ResponseEntity<>(std, HttpStatus.OK);
+        return new ResponseEntity<>("The product was posted successfully!", HttpStatus.OK);
     }
 
     @PostMapping("/products/newpromopost")
-    public ResponseEntity<ProductPromoDTO> addProduct(@RequestBody ProductPromoDTO productDTO) {
+    public ResponseEntity<?> addProduct(@RequestBody ProductPromoDTO productDTO) {
         ProductPromoDTO std = productService.postProductPromo(productDTO);
-        return new ResponseEntity<>(std, HttpStatus.OK);
+        return new ResponseEntity<>("The product was posted successfully!", HttpStatus.OK);
     }
 
 }

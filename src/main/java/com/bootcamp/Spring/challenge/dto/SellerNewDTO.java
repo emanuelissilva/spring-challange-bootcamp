@@ -5,11 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CountPromoDTO {
+public class SellerNewDTO {
     private Integer sellerId;
     private String sellerName;
-    private Integer promoproducts_count;
-
-    public CountPromoDTO() {
-    }
 }
