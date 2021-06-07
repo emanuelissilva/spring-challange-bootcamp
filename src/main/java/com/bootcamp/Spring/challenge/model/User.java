@@ -18,7 +18,6 @@ public class User {
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence")
     private Integer userID;
 
-    @Column(name="userName")
     private String userName;
 
     @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })

@@ -20,8 +20,4 @@ public class ProductDTO {
     private Double price;
     public ProductDTO() {
     }
-
-//    public ProductDTO(Product product) {
-//        this.sellerId = product.getsellerId();
-//    }
 }

@@ -20,17 +20,16 @@ public class ProductController {
         this.productService = productService;
     }
 
-
     @PostMapping("/product")
     public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductDTO productDTO) {
         ProductDTO std = productService.postProduct(productDTO);
-        return new ResponseEntity<>(std, HttpStatus.CREATED);
+        return new ResponseEntity<>(std, HttpStatus.OK);
     }
 
     @PostMapping("/productpromo")
     public ResponseEntity<ProductPromoDTO> addProduct(@RequestBody ProductPromoDTO productDTO) {
         ProductPromoDTO std = productService.postProductPromo(productDTO);
-        return new ResponseEntity<>(std, HttpStatus.CREATED);
+        return new ResponseEntity<>(std, HttpStatus.OK);
     }
 
 }

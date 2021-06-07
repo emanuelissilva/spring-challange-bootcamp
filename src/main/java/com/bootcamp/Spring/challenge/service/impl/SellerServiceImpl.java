@@ -19,6 +19,45 @@ public class SellerServiceImpl implements SellerService {
     @Resource
     private SellerRepository sellerRepository;
 
+    @Transactional
+    @Override
+    public SellerDTO addSeller(SellerDTO sellerDTO) {
+        Seller seller = new Seller();
+        mapDTOToEntity(sellerDTO, seller);
+        Seller savedSeller = sellerRepository.save(seller);
+        return mapSellerEntityToSellerDTO(savedSeller);
+    }
+
+    @Override
+    public List<SellerDTO> getAllSellers() {
+        List<SellerDTO> sellerDTOs = new ArrayList<>();
+        List<Seller> sellers = sellerRepository.findAll();
+        sellers.stream().forEach(seller -> {
+            SellerDTO sellerDTO = mapSellerEntityToSellerDTO(seller);
+            sellerDTOs.add(sellerDTO);
+        });
+        return sellerDTOs;
+    }
+
+    @Transactional
+    @Override
+    public SellerFollowSellerDTO followSeller(Integer followedId, Integer followerId){
+        Seller user = sellerRepository.getOne(followerId);
+        Seller seller = sellerRepository.getOne(followedId);
+        user.followSeller(seller);
+        Seller sellerSaved = sellerRepository.save(user);
+        return mapEntityToSellerFollowDTO(seller);
+    }
+
+    @Transactional
+    @Override
+    public SellerFollowSellerDTO unfollowSeller(Integer followedId, Integer followerId) {
+        Seller user = sellerRepository.getOne(followedId);
+        Seller seller = sellerRepository.getOne(followerId);
+        user.unfollowSeller(seller);
+        Seller sellerSaved = sellerRepository.save(user);
+        return mapEntityToSellerFollowDTO(seller);
+    }
 
     @Transactional
     @Override
@@ -32,13 +71,6 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public CountPromoDTO countPromo(Integer idSeller) {
         Seller seller = sellerRepository.getOne(idSeller);
-        List<Product> list = new ArrayList<>();
-        seller.getProducts().forEach(product -> {
-            if(product.getHasPromo()){
-                list.add(product);
-            }
-        });
-        seller.setCountPromos(list.size());
         return mapCountProductsToDTO(seller);
     }
 
@@ -46,13 +78,32 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public SellerDTO getFollowersList(Integer idSeller) {
         Seller seller = sellerRepository.getOne(idSeller);
-        return mapEntityToDTO(seller);
+        return mapSellerEntityToSellerDTO(seller);
+    }
+
+    @Transactional
+    @Override
+    public SellerFollowSellerDTO getFollowedList(Integer idUser) {
+        Seller seller = sellerRepository.getOne(idUser);
+        return mapEntityToSellerFollowDTO(seller);
     }
 
     @Override
     public SellerProductListDTO getProductlist(Integer idSeller) {
         Seller seller = sellerRepository.getOne(idSeller);
         return mapEntityProductToProductListDTO(seller);
+    }
+
+    @Override
+    public SellerFollowedProductListDTO getProductFollowedList(Integer idSeller) {
+        SellerFollowedProductListDTO user = new SellerFollowedProductListDTO();
+        Seller seller1 = sellerRepository.getOne(idSeller);
+        user.setSellerName(seller1.getSellerName());
+        user.setId(seller1.getSellerId());
+        seller1.getFollowedSellers().forEach(seller -> {
+            user.setProducts(mapProductToProductDTO(seller.getProducts()));
+        });
+        return user;
     }
 
 
@@ -83,33 +134,59 @@ public class SellerServiceImpl implements SellerService {
         return finalresponse;
     }
 
-
-
     @Override
-    public List<FollowerInfoDTO> getFollowersAsc(Integer sellerId) {
+    public SellerDTO getFollowersAsc(Integer sellerId) {
         Seller response = sellerRepository.getOne(sellerId);
-        SellerDTO list = mapEntityToDTO(response);
-        List<FollowerInfoDTO> list1 = list.getFollowers();
-        Collections.sort(list1, Comparator.comparing(FollowerInfoDTO::getUserName));
-        return list1;
+        SellerDTO list = mapSellerEntityToSellerDTO(response);
+        Collections.sort(list.getFollowers(), Comparator.comparing(FollowerInfoDTO::getUserName));
+        Collections.sort(list.getFollowersSeller(), Comparator.comparing(FollowerSellerInfoDTO::getSellerName));
+        return list;
     }
 
     @Override
-    public List<FollowerInfoDTO> getFollowersDesc(Integer sellerId) {
+    public SellerFollowSellerDTO getFollowedAsc(Integer sellerId) {
         Seller response = sellerRepository.getOne(sellerId);
-        SellerDTO list = mapEntityToDTO(response);
-        List<FollowerInfoDTO> list1 = list.getFollowers();
-        Collections.sort(list1, Comparator.comparing(FollowerInfoDTO::getUserName).reversed());
-        return list1;
+        SellerFollowSellerDTO list = mapEntityToSellerFollowDTO(response);
+        Collections.sort(list.getFollowedSellers(), Comparator.comparing(FollowedSellerInfoDTO::getSellerName));
+        return list;
+    }
+
+    @Override
+    public SellerFollowSellerDTO getFollowedDesc(Integer sellerId) {
+        Seller response = sellerRepository.getOne(sellerId);
+        SellerFollowSellerDTO list = mapEntityToSellerFollowDTO(response);
+        Collections.sort(list.getFollowedSellers(), Comparator.comparing(FollowedSellerInfoDTO::getSellerName).reversed());
+        return list;
+    }
+
+    @Override
+    public SellerDTO getFollowersDesc(Integer sellerId) {
+        Seller response = sellerRepository.getOne(sellerId);
+        SellerDTO list = mapSellerEntityToSellerDTO(response);
+        Collections.sort(list.getFollowers(), Comparator.comparing(FollowerInfoDTO::getUserName).reversed());
+        Collections.sort(list.getFollowersSeller(), Comparator.comparing(FollowerSellerInfoDTO::getSellerName).reversed());
+        return list;
     }
 
 
-    private SellerDTO mapEntityToDTO(Seller seller) {
+
+
+
+
+    private SellerDTO mapSellerEntityToSellerDTO(Seller seller) {
         SellerDTO responseDTO = new SellerDTO();
         responseDTO.setSellerName(seller.getSellerName());
         responseDTO.setSellerId(seller.getSellerId());
-        responseDTO.setCountFollowers(seller.getCountFollowers());
         responseDTO.setFollowers(mapFollowers(seller.getFollowers()));
+        responseDTO.setFollowersSeller(mapFollowersSeller(seller.getFollowersSellers()));
+        return responseDTO;
+    }
+
+    private SellerFollowSellerDTO mapEntityToSellerFollowDTO(Seller seller) {
+        SellerFollowSellerDTO responseDTO = new SellerFollowSellerDTO();
+        responseDTO.setSellerName(seller.getSellerName());
+        responseDTO.setSellerId(seller.getSellerId());
+        responseDTO.setFollowedSellers(mapFollowedSellers(seller.getFollowedSellers()));
         return responseDTO;
     }
 
@@ -185,6 +262,22 @@ public class SellerServiceImpl implements SellerService {
         return responseDTO;
     }
 
+    private void mapDTOToEntity(SellerDTO sellerDTO, Seller seller1) {
+        seller1.setSellerName(sellerDTO.getSellerName());
+        if (null == seller1.getFollowedSellers()) {
+            seller1.setFollowedSellers(new HashSet<>());
+        }
+        sellerDTO.getFollowers().stream().forEach(follower -> {
+            Seller seller = sellerRepository.findBySellerName(follower.getUserName());
+            if (null == seller) {
+                seller = new Seller();
+                seller.setSellerName(new String());
+            }
+            seller.setSellerName(follower.getUserName());
+            seller.followSeller(seller);
+        });
+    }
+
     private CountPromoDTO mapCountProductsToDTO(Seller seller) {
         CountPromoDTO responseDTO = new CountPromoDTO();
         responseDTO.setSellerName(seller.getSellerName());
@@ -200,6 +293,29 @@ public class SellerServiceImpl implements SellerService {
             followersList.setUserName(follower.getUserName());
             followersList.setId(follower.getUserID());
             list.add(followersList);
+        });
+        return list;
+    }
+
+    private List<FollowerSellerInfoDTO> mapFollowersSeller(Set<Seller> followers){
+        List<FollowerSellerInfoDTO> list = new ArrayList<>();
+        followers.forEach(follower -> {
+            FollowerSellerInfoDTO followersList = new FollowerSellerInfoDTO();
+            followersList.setSellerName(follower.getSellerName());
+            followersList.setId(follower.getSellerId());
+            list.add(followersList);
+        });
+        return list;
+    }
+
+
+    private List<FollowedSellerInfoDTO> mapFollowedSellers(Set<Seller> followeds){
+        List<FollowedSellerInfoDTO> list = new ArrayList<>();
+        followeds.forEach(followed -> {
+            FollowedSellerInfoDTO followedsList = new FollowedSellerInfoDTO();
+            followedsList.setSellerName(followed.getSellerName());
+            followedsList.setId(followed.getSellerId());
+            list.add(followedsList);
         });
         return list;
     }

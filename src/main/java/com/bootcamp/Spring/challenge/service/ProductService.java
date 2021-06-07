@@ -6,5 +6,4 @@ import com.bootcamp.Spring.challenge.dto.ProductPromoDTO;
 public interface ProductService {
     public ProductDTO postProduct(ProductDTO productDTO);
     public ProductPromoDTO postProductPromo(ProductPromoDTO productDTO);
-
 }

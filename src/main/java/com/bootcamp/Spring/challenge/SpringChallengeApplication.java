@@ -14,7 +14,7 @@ import java.util.List;
 @SpringBootApplication
 public class SpringChallengeApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		ConfigurableApplicationContext configurableApplicationContext = SpringApplication
 				.run(SpringChallengeApplication.class, args);
 		SellerRepository streamRepository = configurableApplicationContext
@@ -24,13 +24,13 @@ public class SpringChallengeApplication {
 
 		User user1 = new User("user1");
 		User user2 = new User("user2");
-		List<User> viewers = Arrays.asList(user1, user2);
+		List<User> users = Arrays.asList(user1, user2);
 
 		Seller seller1 = new Seller("seller1");
 		Seller seller2 = new Seller("seller2");
 		Seller seller3 = new Seller("amanda");
 		Seller seller4 = new Seller("zeta");
-		List<Seller> streams = Arrays.asList(seller1, seller2, seller3, seller4);
+		List<Seller> sellers = Arrays.asList(seller1, seller2, seller3, seller4);
 
 		user1.followSeller(seller1);
 		user1.followSeller(seller2);
@@ -38,12 +38,10 @@ public class SpringChallengeApplication {
 		user1.followSeller(seller4);
 		user2.followSeller(seller3);
 		user2.followSeller(seller4);
-
-
-		viewerRepository.saveAll(viewers);
-		streamRepository.saveAll(streams);
-		seller1.getCountFollowers();
-		seller2.getCountFollowers();
+		seller1.followSeller(seller2);
+		seller1.followSeller(seller3);
+		viewerRepository.saveAll(users);
+		streamRepository.saveAll(sellers);
 	}
 
 }

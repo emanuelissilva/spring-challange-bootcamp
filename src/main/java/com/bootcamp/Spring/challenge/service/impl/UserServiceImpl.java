@@ -1,6 +1,8 @@
 package com.bootcamp.Spring.challenge.service.impl;
 
 import com.bootcamp.Spring.challenge.dto.*;
+import com.bootcamp.Spring.challenge.model.Product;
+import com.bootcamp.Spring.challenge.model.ProductDetail;
 import com.bootcamp.Spring.challenge.model.Seller;
 import com.bootcamp.Spring.challenge.model.User;
 import com.bootcamp.Spring.challenge.repositories.SellerRepository;
@@ -60,7 +62,6 @@ public class UserServiceImpl implements UserService {
         return list1;
     }
 
-
     @Transactional
     @Override
     public UserDTO unfollowSeller(Integer userId, Integer sellerId) {
@@ -86,6 +87,42 @@ public class UserServiceImpl implements UserService {
     public UserFollowedListDTO getUserById(Integer idUser) {
         User user = userRepository.getOne(idUser);
         return mapUserFollowedListToDTO(user);
+    }
+
+    @Override
+    public UserFollowedProductListDTO getProductList(Integer idSeller) {
+        UserFollowedProductListDTO user = new UserFollowedProductListDTO();
+        User user1 = userRepository.getOne(idSeller);
+        user.setUserName(user1.getUserName());
+        user.setId(user1.getUserID());
+        user1.getFollowedSellers().forEach(seller -> {
+            user.setProducts(mapProductToProductDTO(seller.getProducts()));
+        });
+        return user;
+    }
+
+    private List<ProductDTO> mapProductToProductDTO(List<Product> product) {
+        List<ProductDTO> productDTOList = new ArrayList<>();
+        Set<ProductDetail> list = new HashSet<>();
+        ProductDetail detail = new ProductDetail();
+        product.forEach(product1 -> {
+            detail.setProductId(product1.getProductId());
+            detail.setProductName(product1.getProductName());
+            detail.setProductBrand(product1.getProductBrand());
+            detail.setProductType(product1.getProductType());
+            detail.setProductColor(product1.getProductColor());
+            detail.setProductNotes(product1.getProductNotes());
+            ProductDTO productDTO = new ProductDTO();
+            productDTO.setPostDate(product1.getPostDate());
+            productDTO.setPostId(product1.getPostId());
+            productDTO.setCategory(product1.getCategory());
+            productDTO.setPrice(product1.getPrice());
+            productDTO.setSellerId(product1.getSeller().getSellerId());
+            list.add(detail);
+            productDTO.setDetail(list);
+            productDTOList.add(productDTO);
+        });
+        return productDTOList;
     }
 
     private void mapDTOToEntity(UserDTO userDTO, User user) {

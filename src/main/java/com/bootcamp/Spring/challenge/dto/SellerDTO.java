@@ -10,7 +10,6 @@ import java.util.*;
 public class SellerDTO {
     private Integer sellerId;
     private String sellerName;
-    private Integer countFollowers;
-    private Integer countPromos;
     private List<FollowerInfoDTO> followers = new ArrayList<>();
+    private List<FollowerSellerInfoDTO> followersSeller = new ArrayList<>();
 }

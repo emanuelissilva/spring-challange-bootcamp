@@ -13,36 +13,27 @@ import java.time.LocalDate;
 @Table(name = "product")
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_sequence")
-    @SequenceGenerator(name = "product_sequence", sequenceName = "product_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seller_sequence")
+    @SequenceGenerator(name = "seller_sequence", sequenceName = "seller_sequence")
     private Integer postId;
 
-    @Column(name="date")
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate postDate;
 
-    @Column(name="category")
     private Integer category;
 
-    @Column(name="price")
     private Double price;
 
-    @Column(name="productId")
     private Integer productId;
 
-    @Column(name="productName")
     private String productName;
 
-    @Column(name="productType")
     private String productType;
 
-    @Column(name="productBrand")
     private String productBrand;
 
-    @Column(name="productColor")
     private String productColor;
 
-    @Column(name="productNotes")
     private String productNotes;
 
     private Boolean hasPromo;
