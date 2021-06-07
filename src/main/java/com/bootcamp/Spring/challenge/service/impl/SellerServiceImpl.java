@@ -78,15 +78,27 @@ public class SellerServiceImpl implements SellerService {
 
     @Transactional
     @Override
-    public SellerDTO getFollowersList(Integer idSeller) {
+    public SellerDTO getFollowersList(Integer idSeller, String order) {
         Seller seller = sellerRepository.getOne(idSeller);
+        if (order.equals("name_asc")){
+            return getFollowersAsc(idSeller);
+        } else if (order.equals("name_desc"))
+        {
+            return getFollowersDesc(idSeller);
+        } else
         return mapSellerEntityToSellerDTO(seller);
     }
 
     @Transactional
     @Override
-    public SellerFollowSellerDTO getFollowedList(Integer idUser) {
+    public SellerFollowSellerDTO getFollowedList(Integer idUser, String order) {
         Seller seller = sellerRepository.getOne(idUser);
+        if (order.equals("name_asc")){
+            return getFollowedAsc(idUser);
+        } else if (order.equals("name_desc"))
+        {
+            return getFollowedDesc(idUser);
+        } else
         return mapEntityToSellerFollowDTO(seller);
     }
 
@@ -97,7 +109,17 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public SellerFollowedProductListDTO getProductFollowedList(Integer idSeller) {
+    public SellerFollowedProductListDTO getProductFollowedList(Integer idSeller, String order) {
+        if (order.equals("date_asc")){
+            return getProductAsc(idSeller);
+        } else if (order.equals("date_desc"))
+        {
+            return getProductDesc(idSeller);
+        } else
+            return getProductFollowedListWithoutSort(idSeller);
+    }
+
+    public SellerFollowedProductListDTO getProductFollowedListWithoutSort(Integer idSeller) {
         SellerFollowedProductListDTO user = new SellerFollowedProductListDTO();
         SellerFollowedProductListDTO user2 = new SellerFollowedProductListDTO();
         List<ProductDTO> posts = new ArrayList<>();
@@ -124,7 +146,6 @@ public class SellerServiceImpl implements SellerService {
     }
 
 
-    @Override
     public SellerFollowedProductListDTO getProductDesc(Integer sellerId) {
         Seller response = sellerRepository.getOne(sellerId);
         SellerFollowedProductListDTO user = new SellerFollowedProductListDTO();
@@ -137,7 +158,6 @@ public class SellerServiceImpl implements SellerService {
         return user;
     }
 
-    @Override
     public SellerFollowedProductListDTO getProductAsc(Integer sellerId) {
         Seller response = sellerRepository.getOne(sellerId);
         SellerFollowedProductListDTO user = new SellerFollowedProductListDTO();
@@ -159,7 +179,6 @@ public class SellerServiceImpl implements SellerService {
         return list;
     }
 
-    @Override
     public SellerFollowSellerDTO getFollowedAsc(Integer sellerId) {
         Seller response = sellerRepository.getOne(sellerId);
         SellerFollowSellerDTO list = mapEntityToSellerFollowDTO(response);
@@ -167,7 +186,6 @@ public class SellerServiceImpl implements SellerService {
         return list;
     }
 
-    @Override
     public SellerFollowSellerDTO getFollowedDesc(Integer sellerId) {
         Seller response = sellerRepository.getOne(sellerId);
         SellerFollowSellerDTO list = mapEntityToSellerFollowDTO(response);

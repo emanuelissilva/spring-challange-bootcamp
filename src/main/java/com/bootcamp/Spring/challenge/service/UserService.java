@@ -12,10 +12,6 @@ public interface UserService {
     public List<UserDTO> getAllUsers();
     public UserDTO followSeller(Integer idUser, Integer idSeller);
     public UserDTO unfollowSeller(Integer userId, Integer sellerId);
-    public UserFollowedListDTO getUserById(Integer idUser);
-    public UserFollowedListDTO getFollowedSellerAsc(Integer userId);
-    public UserFollowedListDTO getFollowedSellerDesc(Integer userId);
-    public UserFollowedProductListDTO getProductList(Integer userId);
-    public UserFollowedProductListDTO getProductDesc(Integer sellerId);
-    public UserFollowedProductListDTO getProductAsc(Integer sellerId);
+    public UserFollowedListDTO getUserById(Integer idUser, String order);
+    public UserFollowedProductListDTO getProductList(Integer userId, String order);
 }

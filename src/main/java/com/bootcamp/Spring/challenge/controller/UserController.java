@@ -43,38 +43,24 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/followed/list")
-    public ResponseEntity followed(@PathVariable("userId") Integer userId) {
-        UserFollowedListDTO std = userService.getUserById(userId);
+    public ResponseEntity followed(@PathVariable("userId") Integer userId,
+                                   @RequestParam(name = "order",
+                                           required = false,
+                                           defaultValue = "")
+                                           String order){
+        UserFollowedListDTO std = userService.getUserById(userId, order);
         return new ResponseEntity<>(std, HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/followed/asc")
-    public ResponseEntity followedAsc(@PathVariable("userId") Integer userId) {
-        UserFollowedListDTO std = userService.getFollowedSellerAsc(userId);
-        return new ResponseEntity<>(std, HttpStatus.OK);
-    }
-
-    @GetMapping("/{userId}/followed/desc")
-    public ResponseEntity followedDesc(@PathVariable("userId") Integer userId) {
-        UserFollowedListDTO std = userService.getFollowedSellerDesc(userId);
-        return new ResponseEntity<>(std, HttpStatus.OK);
-    }
 
     @GetMapping("/products/followed/{userId}/list")
-    public ResponseEntity<UserFollowedProductListDTO> getProducts(@PathVariable("userId") Integer sellerId) {
-        UserFollowedProductListDTO seller = userService.getProductList(sellerId);
+    public ResponseEntity<UserFollowedProductListDTO> getProducts(@PathVariable("userId") Integer sellerId,
+                                                                  @RequestParam(name = "order",
+                                                                  required = false,
+                                                                  defaultValue = "")
+                                                                  String order){
+        UserFollowedProductListDTO seller = userService.getProductList(sellerId, order);
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }
 
-    @GetMapping("/products/followed/{userId}/date_desc")
-    public ResponseEntity<UserFollowedProductListDTO> getProductsDesc(@PathVariable("userId") Integer sellerId) {
-        UserFollowedProductListDTO seller = userService.getProductDesc(sellerId);
-        return new ResponseEntity<>(seller, HttpStatus.OK);
-    }
-
-    @GetMapping("/products/followed/{userId}/date_asc")
-    public ResponseEntity<UserFollowedProductListDTO> getProductsAsc(@PathVariable("userId") Integer sellerId) {
-        UserFollowedProductListDTO seller= userService.getProductAsc(sellerId);
-        return new ResponseEntity<>(seller, HttpStatus.OK);
-    }
 }

@@ -11,15 +11,11 @@ public interface SellerService {
     public SellerFollowSellerDTO unfollowSeller(Integer idFollowSeller, Integer sellerId);
     public CountFollowsDTO countFollowers(Integer idSeller);
     public CountPromoDTO countPromo(Integer idSeller);
-    public SellerDTO getFollowersList(Integer idSeller);
-    public SellerFollowSellerDTO getFollowedList(Integer idSeller);
+    public SellerDTO getFollowersList(Integer idSeller, String order);
+    public SellerFollowSellerDTO getFollowedList(Integer idSeller, String order);
     public SellerProductListDTO getProductlist(Integer idSeller);
-    public SellerFollowedProductListDTO getProductFollowedList(Integer idSeller);
+    public SellerFollowedProductListDTO getProductFollowedList(Integer idSeller, String order);
     public SellerPromoDTO getProductPromolist(Integer idSeller);
     public SellerDTO getFollowersAsc(Integer idSeller);
     public SellerDTO getFollowersDesc(Integer idSeller);
-    public SellerFollowSellerDTO getFollowedAsc(Integer idSeller);
-    public SellerFollowSellerDTO getFollowedDesc(Integer idSeller);
-    public SellerFollowedProductListDTO getProductDesc(Integer sellerId);
-    public SellerFollowedProductListDTO getProductAsc(Integer sellerId);
 }

@@ -45,7 +45,6 @@ public class UserServiceImpl implements UserService {
         return userDTOs;
     }
 
-    @Override
     public UserFollowedListDTO getFollowedSellerAsc(Integer userId) {
         User response = userRepository.getOne(userId);
         UserFollowedListDTO list = mapUserFollowedListToDTO(response);
@@ -53,7 +52,6 @@ public class UserServiceImpl implements UserService {
         return list;
     }
 
-    @Override
     public UserFollowedListDTO getFollowedSellerDesc(Integer userId) {
         User response = userRepository.getOne(userId);
         UserFollowedListDTO list = mapUserFollowedListToDTO(response);
@@ -83,13 +81,27 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserFollowedListDTO getUserById(Integer idUser) {
+    public UserFollowedListDTO getUserById(Integer idUser, String order) {
         User user = userRepository.getOne(idUser);
+        if (order.equals("name_asc")){
+            return getFollowedSellerAsc(idUser);
+        } else if (order.equals("name_desc")){
+            return getFollowedSellerDesc(idUser);
+        } else
         return mapUserFollowedListToDTO(user);
     }
 
     @Override
-    public UserFollowedProductListDTO getProductList(Integer idSeller) {
+    public UserFollowedProductListDTO getProductList(Integer idSeller, String order) {
+        if (order.equals("date_asc")){
+            return getProductAsc(idSeller);
+        } else if (order.equals("date_desc")){
+            return getProductDesc(idSeller);
+        } else
+            return getProductListWithoutSort(idSeller);
+    }
+
+    public UserFollowedProductListDTO getProductListWithoutSort(Integer idSeller) {
         UserFollowedProductListDTO user = new UserFollowedProductListDTO();
         UserFollowedProductListDTO user2 = new UserFollowedProductListDTO();
         List<ProductDTO> posts = new ArrayList<>();
@@ -109,7 +121,8 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
+
+
     public UserFollowedProductListDTO getProductDesc(Integer sellerId) {
         UserFollowedProductListDTO user = new UserFollowedProductListDTO();
         User user1 = userRepository.getOne(sellerId);
@@ -122,7 +135,6 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
     public UserFollowedProductListDTO getProductAsc(Integer sellerId) {
         UserFollowedProductListDTO user = new UserFollowedProductListDTO();
         User user1 = userRepository.getOne(sellerId);

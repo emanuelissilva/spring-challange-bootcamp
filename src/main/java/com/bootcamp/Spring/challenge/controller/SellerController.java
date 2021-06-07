@@ -55,66 +55,38 @@ public class SellerController {
     }
 
     @GetMapping("/{userId}/followers/list")
-    public ResponseEntity<SellerDTO> getFollowers(@PathVariable("userId") Integer sellerId) {
-        SellerDTO seller = sellerService.getFollowersList(sellerId);
+    public ResponseEntity<SellerDTO> getFollowers(@PathVariable("userId") Integer sellerId,
+                                                  @RequestParam(name = "order",
+                                                  required = false,
+                                                  defaultValue = "")
+                                                  String order){
+        SellerDTO seller = sellerService.getFollowersList(sellerId, order);
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }
 
     @GetMapping("/sellers/{userId}/followed/list")
-    public ResponseEntity<SellerFollowSellerDTO> getFollowed(@PathVariable("userId") Integer sellerId) {
-        SellerFollowSellerDTO seller = sellerService.getFollowedList(sellerId);
+    public ResponseEntity<SellerFollowSellerDTO> getFollowed(@PathVariable("userId") Integer sellerId,
+                                                             @RequestParam(name = "order",
+                                                             required = false,
+                                                             defaultValue = "")
+                                                             String order){
+        SellerFollowSellerDTO seller = sellerService.getFollowedList(sellerId, order);
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }
 
     @GetMapping("/sellers/products/followed/{userId}/list")
-    public ResponseEntity<SellerFollowedProductListDTO> getProductsFollowed(@PathVariable("userId") Integer sellerId) {
-        SellerFollowedProductListDTO seller = sellerService.getProductFollowedList(sellerId);
+    public ResponseEntity<SellerFollowedProductListDTO> getProductsFollowed(@PathVariable("userId") Integer sellerId,
+                                                                            @RequestParam(name = "order",
+                                                                            required = false,
+                                                                            defaultValue = "")
+                                                                            String order){
+        SellerFollowedProductListDTO seller = sellerService.getProductFollowedList(sellerId, order);
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }
 
     @GetMapping("/products/{userId}/list")
     public ResponseEntity<SellerProductListDTO> getProducts(@PathVariable("userId") Integer sellerId) {
         SellerProductListDTO seller = sellerService.getProductlist(sellerId);
-        return new ResponseEntity<>(seller, HttpStatus.OK);
-    }
-
-    @GetMapping("/{userId}/followers/listname_asc")
-    public ResponseEntity followerAsc( //@RequestParam(value="name_asc") String param1,
-                                       @PathVariable("userId") Integer sellerId) {
-        SellerDTO std = sellerService.getFollowersAsc(sellerId);
-        return new ResponseEntity<>(std, HttpStatus.OK);
-    }
-
-    @GetMapping("/{userId}/followers/listname_desc")
-    public ResponseEntity followerDesc(//@RequestParam(value="name_desc") String param1,
-                                       @PathVariable("userId") Integer sellerId) {
-        SellerDTO std = sellerService.getFollowersDesc(sellerId);
-        return new ResponseEntity<>(std, HttpStatus.OK);
-    }
-
-    @GetMapping("/sellers/{userId}/followed/listname_asc")
-    public ResponseEntity followedAsc( //@RequestParam(value="name_asc") String param1,
-                                       @PathVariable("userId") Integer sellerId) {
-        SellerFollowSellerDTO std = sellerService.getFollowedAsc(sellerId);
-        return new ResponseEntity<>(std, HttpStatus.OK);
-    }
-
-    @GetMapping("/sellers/{userId}/followed/listname_desc")
-    public ResponseEntity followedDesc( //@RequestParam(value="name_asc") String param1,
-                                        @PathVariable("userId") Integer sellerId) {
-        SellerFollowSellerDTO std = sellerService.getFollowedDesc(sellerId);
-        return new ResponseEntity<>(std, HttpStatus.OK);
-    }
-
-    @GetMapping("/sellers/products/followed/{userId}/date_desc")
-    public ResponseEntity<SellerFollowedProductListDTO> getProductsDesc(@PathVariable("userId") Integer sellerId) {
-        SellerFollowedProductListDTO seller = sellerService.getProductDesc(sellerId);
-        return new ResponseEntity<>(seller, HttpStatus.OK);
-    }
-
-    @GetMapping("/sellers/products/followed/{userId}/date_asc")
-    public ResponseEntity<SellerFollowedProductListDTO> getProductsAsc(@PathVariable("userId") Integer sellerId) {
-        SellerFollowedProductListDTO seller= sellerService.getProductAsc(sellerId);
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }
 
