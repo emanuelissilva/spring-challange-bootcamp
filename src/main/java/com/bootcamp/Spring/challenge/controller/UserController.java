@@ -3,6 +3,8 @@ package com.bootcamp.Spring.challenge.controller;
 import java.util.List;
 
 import com.bootcamp.Spring.challenge.dto.*;
+import com.bootcamp.Spring.challenge.model.Seller;
+import com.bootcamp.Spring.challenge.model.User;
 import com.bootcamp.Spring.challenge.repositories.SellerRepository;
 import com.bootcamp.Spring.challenge.repositories.UserRepository;
 import com.bootcamp.Spring.challenge.service.UserService;
@@ -41,7 +43,11 @@ public class UserController {
 
     @PostMapping("/{userId}/follow/{sellerIdToFollow}")
     public ResponseEntity follow(@PathVariable("userId") Integer userId, @PathVariable("sellerIdToFollow") Integer sellerId) {
-        if ((!userRepository.existsById(userId)) && (!sellerRepository.existsById(sellerId)))
+        User followed = userRepository.getById(userId);
+        Seller follower = sellerRepository.getById(sellerId);
+        if(followed.getFollowedSellers().contains(follower)){
+            return new ResponseEntity<>("This seller is already been followed!", HttpStatus.BAD_REQUEST);
+        }else if ((!userRepository.existsById(userId)) && (!sellerRepository.existsById(sellerId)))
             return new ResponseEntity<>("Both seller and user doesn't exists! Try another Id", HttpStatus.BAD_REQUEST);
         else if (!sellerRepository.existsById(sellerId))
             return new ResponseEntity<>("This seller doesn't exists! Try another Id", HttpStatus.BAD_REQUEST);
@@ -55,7 +61,11 @@ public class UserController {
 
     @PostMapping("/{userId}/unfollow/{sellerIdToUnfollow}")
     public ResponseEntity unfollow(@PathVariable("userId") Integer userId, @PathVariable("sellerIdToUnfollow") Integer sellerId) {
-        if ((!userRepository.existsById(userId)) && (!sellerRepository.existsById(sellerId)))
+        User followed = userRepository.getById(userId);
+        Seller follower = sellerRepository.getById(sellerId);
+        if(!followed.getFollowedSellers().contains(follower)){
+            return new ResponseEntity<>("It's not possible unfollow a seller that isn't been followed!", HttpStatus.BAD_REQUEST);
+        }else if ((!userRepository.existsById(userId)) && (!sellerRepository.existsById(sellerId)))
             return new ResponseEntity<>("Both seller and user doesn't exists! Try another Id", HttpStatus.BAD_REQUEST);
         else if (!sellerRepository.existsById(sellerId))
             return new ResponseEntity<>("This seller doesn't exists! Try another Id", HttpStatus.BAD_REQUEST);

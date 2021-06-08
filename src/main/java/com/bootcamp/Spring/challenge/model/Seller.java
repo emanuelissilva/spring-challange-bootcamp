@@ -40,12 +40,12 @@ public class Seller {
 
     public void followSeller(Seller seller){
         this.followed.add(seller);
-        seller.getFollowedSellers().add(this);
+        seller.getFollowersSellers().add(this);
     }
 
     public void unfollowSeller(Seller seller) {
         this.followed.remove(seller);
-        seller.getFollowedSellers().remove(this);
+        seller.getFollowersSellers().remove(this);
     }
 
     public Seller(String sellerName) {
@@ -57,15 +57,17 @@ public class Seller {
     @OneToMany(mappedBy = "seller")
     private List<Product> products;
 
-    public Integer getCountFollowers() { return this.followers.size()+this.followersSellers.size(); }
+    public Integer getFollowers_count() { return this.followers.size()+this.followersSellers.size(); }
 
     public Integer getCountPromos() {
         final Integer[] countPromo = {0};
         this.products.forEach(product -> {
-            if(product.getHasPromo()){
-                countPromo[0]++;
+            if(product.getHasPromo()==null){
+                countPromo[0]=countPromo[0];
+            }else if(!product.getHasPromo()){
+                countPromo[0]=countPromo[0];
             }else
-                countPromo[0]=0;
+                countPromo[0]++;
         });
         return this.countPromos=countPromo[0];
     }
