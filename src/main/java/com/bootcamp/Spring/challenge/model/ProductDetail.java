@@ -12,4 +12,16 @@ public class ProductDetail {
     private String productBrand;
     private String productColor;
     private String productNotes;
+
+    public ProductDetail(Integer productId, String productName, String productType, String productBrand, String productColor, String productNotes) {
+        this.productId = productId;
+        this.productName = productName;
+        this.productType = productType;
+        this.productBrand = productBrand;
+        this.productColor = productColor;
+        this.productNotes = productNotes;
+    }
+
+    public ProductDetail() {
+    }
 }

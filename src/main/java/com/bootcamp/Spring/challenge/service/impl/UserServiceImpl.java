@@ -65,6 +65,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.getOne(userId);
         Seller seller = sellerRepository.getOne(sellerId);
         user.getFollowedSellers().remove(seller);
+        seller.getFollowers().remove(user);
         User userSaved = userRepository.save(user);
         return mapEntityToDTO(user);
     }
@@ -75,6 +76,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.getOne(idUser);
         Seller seller = sellerRepository.getOne(idSeller);
         user.getFollowedSellers().add(seller);
+        seller.getFollowers().add(user);
         User userSaved = userRepository.save(user);
         return mapEntityToDTO(user);
     }

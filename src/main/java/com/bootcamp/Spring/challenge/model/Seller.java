@@ -18,16 +18,16 @@ public class Seller {
     @SequenceGenerator(name = "seller_sequence", sequenceName = "seller_sequence")
     private Integer sellerId;
     private String sellerName;
-    private Integer followers_count;
+    private Integer followers_count=0;
     private Integer countPromos=0;
 
     @ManyToMany(mappedBy="followedSellers")
     private Set<User> followers = new HashSet<>();
 
-    @ManyToMany(mappedBy="followedSellers")
+    @ManyToMany(mappedBy="followedSellers", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     private Set<Seller> followersSellers = new HashSet<>();
 
-    @ManyToMany(mappedBy="followed")
+    @ManyToMany(mappedBy="followed", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     private Set<Seller> followedSellers = new HashSet<>();
 
     @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
@@ -57,9 +57,7 @@ public class Seller {
     @OneToMany(mappedBy = "seller")
     private List<Product> products;
 
-    public Integer getCountFollowers() {
-        return this.followers.size()+this.followersSellers.size();
-    }
+    public Integer getCountFollowers() { return this.followers.size()+this.followersSellers.size(); }
 
     public Integer getCountPromos() {
         final Integer[] countPromo = {0};

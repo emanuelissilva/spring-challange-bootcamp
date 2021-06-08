@@ -20,4 +20,13 @@ public class ProductDTO {
     private Double price;
     public ProductDTO() {
     }
+
+    public ProductDTO(Integer sellerId, Integer id_post, LocalDate date, Set<ProductDetail> detail, Integer category, Double price) {
+        this.sellerId = sellerId;
+        this.id_post = id_post;
+        this.date = date;
+        this.detail = detail;
+        this.category = category;
+        this.price = price;
+    }
 }

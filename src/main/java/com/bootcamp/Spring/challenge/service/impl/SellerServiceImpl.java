@@ -256,14 +256,13 @@ public class SellerServiceImpl implements SellerService {
     private List<ProductPromoDTO> mapProductToProductPromoDTO(List<Product> product) {
         List<ProductPromoDTO> productPromoDTOList = new ArrayList<>();
         Set<ProductDetail> list = new HashSet<>();
-        ProductDetail detail = new ProductDetail();
         product.forEach(product1 -> {
-            detail.setProductId(product1.getProductId());
-            detail.setProductName(product1.getProductName());
-            detail.setProductBrand(product1.getProductBrand());
-            detail.setProductType(product1.getProductType());
-            detail.setProductColor(product1.getProductColor());
-            detail.setProductNotes(product1.getProductNotes());
+            ProductDetail detail = new ProductDetail(product1.getProductId(),
+                    product1.getProductName(),
+                    product1.getProductBrand(),
+                    product1.getProductType(),
+                    product1.getProductColor(),
+                    product1.getProductNotes());
             ProductPromoDTO productPromoDTO = new ProductPromoDTO();
             productPromoDTO.setDate(product1.getDate());
             productPromoDTO.setId_post(product1.getId_post());

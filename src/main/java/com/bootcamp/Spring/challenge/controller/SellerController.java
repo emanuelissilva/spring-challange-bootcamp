@@ -46,7 +46,7 @@ public class SellerController {
         else if (!sellerRepository.existsById(followedId))
             return new ResponseEntity<>("The followed seller doesn't exists! Try another Id", HttpStatus.BAD_REQUEST);
         else {
-            SellerFollowSellerDTO std = sellerService.followSeller(followedId, followedId);
+            SellerFollowSellerDTO std = sellerService.followSeller(followerId, followedId);
             return new ResponseEntity<>("The seller "+followerId+" has followed seller "+followedId+"!", HttpStatus.OK);
         }
     }
@@ -62,7 +62,7 @@ public class SellerController {
         else if (!sellerRepository.existsById(followedId))
             return new ResponseEntity<>("The followed seller doesn't exists! Try another Id", HttpStatus.BAD_REQUEST);
         else {
-            SellerFollowSellerDTO std = sellerService.unfollowSeller(followedId, followedId);
+            SellerFollowSellerDTO std = sellerService.unfollowSeller(followerId, followedId);
             return new ResponseEntity<>("The seller "+followerId+" has unfollowed seller "+followedId+"!", HttpStatus.OK);
         }
     }
