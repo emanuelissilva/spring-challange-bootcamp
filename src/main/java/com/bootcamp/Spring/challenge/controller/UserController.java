@@ -49,7 +49,7 @@ public class UserController {
             return new ResponseEntity<>("This user doesn't exists! Try another Id", HttpStatus.BAD_REQUEST);
         else {
             UserDTO std = userService.followSeller(userId, sellerId);
-            return new ResponseEntity<>("The user " + userId + " has followed seller" + sellerId + "!", HttpStatus.OK);
+            return new ResponseEntity<>("The user " + userId + " has followed seller " + sellerId + "!", HttpStatus.OK);
         }
     }
 
