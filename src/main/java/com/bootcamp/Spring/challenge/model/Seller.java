@@ -64,8 +64,8 @@ public class Seller {
         this.products.forEach(product -> {
             if(product.getHasPromo()){
                 countPromo[0]++;
-            }else if (product.getHasPromo()==null)
-                countPromo[0]=countPromo[0];
+            }else
+                countPromo[0]=0;
         });
         return this.countPromos=countPromo[0];
     }

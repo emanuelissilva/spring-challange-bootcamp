@@ -8,7 +8,10 @@ A social network to users and sellers.
 
 This project was developed in Java with Spring Framework and H2 Database, to create a social network.
 
-To use this API you must clone this repository. When started, the database will be automatically populated with some users, sellers, follows and products. There is a postman collection on .JSON format in the resources path. You can access database on http://localhost:8080/h2-ui/login.do?jsessionid=22a5cdf54200923a90a21f22058999db, where the access is the default H2 user.
+To use this API you must clone this repository. When started, the database will be automatically populated with some 
+users, sellers, follows and products. There is a postman collection in the resources path the can be used to test the endpoints. You can 
+access the database on http://localhost:8080/h2-ui/login.do?jsessionid=22a5cdf54200923a90a21f22058999db, where the access 
+is the default H2 user. The JDBC URL is jdbc:h2:mem:testdb
 
 ## **Endpoints**
 
@@ -317,20 +320,20 @@ If you pass a follower seller, followed seller or both that doesn't exists will 
 ### Alphabetical order - ascending and descending (GET**)**
 
 - [http://localhost:8080/users/{sellerId}/followers/list?order=name_asc](http://localhost:8080/users/3/followers/list?order=name_asc)
-- [http://localhost:8080/users/{sellerId}/followers/list?order=name_](http://localhost:8080/users/3/followers/list?order=name_asc)desc
-- [http://localhost:8080/users/{userId}/followed/list?order=name_](http://localhost:8080/users/2/followed/list?order=name_desc)asc
-- [http://localhost:8080/users/{userId}/followed/list?order=name](http://localhost:8080/users/2/followed/list?order=name_desc)_desc
+- [http://localhost:8080/users/{sellerId}/followers/list?order=name_desc](http://localhost:8080/users/3/followers/list?order=name_desc)
+- [http://localhost:8080/users/{userId}/followed/list?order=name_asc](http://localhost:8080/users/2/followed/list?order=name_asc)
+- [http://localhost:8080/users/{userId}/followed/list?order=name_desc](http://localhost:8080/users/2/followed/list?order=name_desc)
 - [http://localhost:8080/users/sellers/{sellerId}/followed/list?order=name_asc](http://localhost:8080/users/sellers/1/followed/list?order=name_asc)
-- [http://localhost:8080/users/sellers/{sellerId}/followed/list?order=name_](http://localhost:8080/users/sellers/1/followed/list?order=name_asc)desc
+- [http://localhost:8080/users/sellers/{sellerId}/followed/list?order=name_desc](http://localhost:8080/users/sellers/1/followed/list?order=name_desc)
 
 Ascending or descending alphabetical order of followed sellers from a given user. Ascending or descending alphabetical order of followers users/sellers or followed sellers from a given seller. Returns a message ordering the list accordingly to query param.
 
 ### Date order - ascending and descending (GET**)**
 
 - [http://localhost:8080/users/sellers/products/followed/{sellerId}/list?order=date_asc](http://localhost:8080/users/sellers/products/followed/1/list?order=date_asc)
-- [http://localhost:8080/users/sellers/products/followed/{sellerId}/list?order=date_](http://localhost:8080/users/sellers/products/followed/1/list?order=date_asc)desc
+- [http://localhost:8080/users/sellers/products/followed/{sellerId}/list?order=date_desc](http://localhost:8080/users/sellers/products/followed/1/list?order=date_desc)
 - [http://localhost:8080/users/products/followed/{userId}/list?order=date_asc](http://localhost:8080/users/products/followed/1/list?order=date_asc)
-- [http://localhost:8080/users/products/followed/{userId}/list?order=date_](http://localhost:8080/users/products/followed/1/list?order=date_asc)desc
+- [http://localhost:8080/users/products/followed/{userId}/list?order=date_desc](http://localhost:8080/users/products/followed/1/list?order=date_desc)
 
 Ascending or descending order by post date of followed sellers posts from a given user. Ascending or descending order by post date of followed sellers posts from a given seller. Returns a message ordering posts accordingly to query param considering the last two weeks from the request date.
 
