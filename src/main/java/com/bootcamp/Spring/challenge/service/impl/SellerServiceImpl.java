@@ -64,7 +64,7 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public CountFollowsDTO countFollowers(Integer idSeller) {
         Seller seller = sellerRepository.getOne(idSeller);
-        seller.setFollowers_count(seller.getFollowers().size());
+        seller.setFollowers_count(seller.getFollowers().size()+seller.getFollowersSellers().size());
         return mapToDTO(seller);
     }
 
@@ -283,7 +283,7 @@ public class SellerServiceImpl implements SellerService {
         CountFollowsDTO responseDTO = new CountFollowsDTO();
         responseDTO.setSellerName(seller.getSellerName());
         responseDTO.setSellerId(seller.getSellerId());
-        responseDTO.setFollowers_count(seller.getCountFollowers());
+        responseDTO.setFollowers_count(seller.getFollowers_count());
         return responseDTO;
     }
 

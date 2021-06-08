@@ -43,12 +43,20 @@ public class SpringChallengeApplication {
 		user1.followSeller(seller3);
 		user2.followSeller(seller4);
 		user2.followSeller(seller3);
-		user2.followSeller(seller2);
+		user3.followSeller(seller1);
 
 		seller1.followSeller(seller2);
 		seller2.followSeller(seller4);
-		seller3.followSeller(seller2);
-		seller1.followSeller(seller4);
+		seller3.followSeller(seller1);
+		seller1.followSeller(seller3);
+
+		userRepository.saveAll(users);
+		sellerRepository.saveAll(sellers);
+
+		seller1.setFollowers_count(seller1.getFollowers_count());
+		seller2.setFollowers_count(seller2.getFollowers_count());
+		seller3.setFollowers_count(seller3.getFollowers_count());
+		seller4.setFollowers_count(seller4.getFollowers_count());
 
 		userRepository.saveAll(users);
 		sellerRepository.saveAll(sellers);
@@ -56,12 +64,24 @@ public class SpringChallengeApplication {
 		LocalDate date = LocalDate.now().minusWeeks(1);
 		LocalDate date2 = LocalDate.now().minusDays(5);
 		LocalDate date3 = LocalDate.now().minusDays(3);
-		Product product1 = new Product(3,date,2,100.04,2,"mouse","gamer", "race", "red", "special",true,0.34, seller2);
-		Product product2 = new Product(4,date2,2,100.04,5,"chair","gamer", "race", "blue", "special",false,0.14, seller2);
-		Product product3 = new Product(4,date3,2,100.04,5,"chair","gamer", "race", "blue", "special",null,0.14, seller2);
+		Product product1 = new Product(1,date,2,100.04,2,"mouse","gamer", "race", "red", "special",true,0.34, seller2);
+		Product product4 = new Product(2,date,2,450.04,5,"monitor","gamer", "race", "red", "special",true,0.10, seller2);
+		Product product2 = new Product(3,date2,2,100.04,7,"chair","gamer", "race", "blue", "special",false,0.14, seller2);
+		Product product3 = new Product(4,date3,2,100.04,9,"chair","gamer", "race", "blue", "special",null,0.14, seller2);
 		productRepository.save(product1);
+		productRepository.save(product4);
 		productRepository.save(product2);
 		productRepository.save(product3);
+		List<Product> list = new ArrayList<>();
+		list.add(product1);
+		list.add(product4);
+		list.add(product2);
+		list.add(product3);
+
+		seller2.setProducts(list);
+		sellerRepository.save(seller2);
+		seller2.setCountPromos(seller2.getCountPromos());
+		sellerRepository.save(seller2);
 	}
 
 }

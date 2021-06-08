@@ -1,6 +1,7 @@
 package com.bootcamp.Spring.challenge.controller;
 
 import com.bootcamp.Spring.challenge.dto.*;
+import com.bootcamp.Spring.challenge.model.Seller;
 import com.bootcamp.Spring.challenge.repositories.SellerRepository;
 import com.bootcamp.Spring.challenge.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,11 @@ public class SellerController {
 
     @PostMapping("/sellers/{sellerId}/follow/{sellerIdToFollow}")
     public ResponseEntity follow(@PathVariable("sellerId") Integer followerId, @PathVariable("sellerIdToFollow") Integer followedId) {
-        if(followerId==followedId)
+        Seller followed = sellerRepository.getById(followedId);
+        Seller follower = sellerRepository.getById(followerId);
+        if(followed.getFollowed().contains(follower)){
+            return new ResponseEntity<>("This seller is already been followed!", HttpStatus.BAD_REQUEST);
+        }else if(followerId==followedId)
             return new ResponseEntity<>("A seller can't follow himself!", HttpStatus.BAD_REQUEST);
         else if ((!sellerRepository.existsById(followerId)) && (!sellerRepository.existsById(followedId)))
             return new ResponseEntity<>("Both sellers doesn't exists! Try another Id", HttpStatus.BAD_REQUEST);
@@ -53,7 +58,11 @@ public class SellerController {
 
     @PostMapping("/sellers/{sellerId}/unfollow/{sellerIdToUnfollow}")
     public ResponseEntity unfollow(@PathVariable("sellerId") Integer followerId, @PathVariable("sellerIdToUnfollow") Integer followedId) {
-        if(followerId==followedId)
+        Seller followed = sellerRepository.getById(followedId);
+        Seller follower = sellerRepository.getById(followerId);
+        if(!followed.getFollowed().contains(follower)){
+            return new ResponseEntity<>("It's not possible unfollow a seller that isn't been followed!", HttpStatus.BAD_REQUEST);
+        }else if(followerId==followedId)
             return new ResponseEntity<>("A seller can't unfollow himself!", HttpStatus.BAD_REQUEST);
         else if ((!sellerRepository.existsById(followerId)) && (!sellerRepository.existsById(followedId)))
             return new ResponseEntity<>("Both sellers doesn't exists! Try another Id", HttpStatus.BAD_REQUEST);
