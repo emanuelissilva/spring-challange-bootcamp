@@ -1,0 +1,726 @@
+{
+	"info": {
+		"_postman_id": "552ac2ca-b5eb-47da-89e9-a2089c09645c",
+		"name": "Spring challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Seller follow seller",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/sellers/1/follow/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"sellers",
+						"1",
+						"follow",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User follow seller",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/1/follow/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"1",
+						"follow",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Followers count",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/3/followers/count",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"3",
+						"followers",
+						"count"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Followers list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/1/followers/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"1",
+						"followers",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Seller followed list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/sellers/3/followed/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"sellers",
+						"3",
+						"followed",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User followed list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/1/followed/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"1",
+						"followed",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sellerId\": 3,\n    \"date\": \"03-06-2021\",\n    \"detail\": [{\n        \"productId\":1,\n        \"productName\":\"headset\",\n        \"productType\": \"gamer\",\n        \"productBrand\": \"race\",\n        \"productColor\": \"red\",\n        \"productNotes\": \"special\"\n    }],\n    \"category\": 100,\n    \"price\": 800.50\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users/products/newpost",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"products",
+						"newpost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post list - users followed",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/products/followed/1/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"products",
+						"followed",
+						"1",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post list - sellers followed",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/sellers/products/followed/1/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"sellers",
+						"products",
+						"followed",
+						"1",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User unfollow seller",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/1/unfollow/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"1",
+						"unfollow",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Seller unfollow seller",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/sellers/1/unfollow/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"sellers",
+						"1",
+						"unfollow",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Followers list asc",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/3/followers/list?order=name_asc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"3",
+						"followers",
+						"list"
+					],
+					"query": [
+						{
+							"key": "order",
+							"value": "name_asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Followers list desc",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/3/followers/list?order=name_desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"3",
+						"followers",
+						"list"
+					],
+					"query": [
+						{
+							"key": "order",
+							"value": "name_desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Followed list asc - sellers followed",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/sellers/1/followed/list?order=name_asc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"sellers",
+						"1",
+						"followed",
+						"list"
+					],
+					"query": [
+						{
+							"key": "order",
+							"value": "name_asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Followed list desc - sellers followed",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/sellers/1/followed/list?order=name_desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"sellers",
+						"1",
+						"followed",
+						"list"
+					],
+					"query": [
+						{
+							"key": "order",
+							"value": "name_desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Followed list asc - users followed",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/2/followed/list?order=name_asc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"2",
+						"followed",
+						"list"
+					],
+					"query": [
+						{
+							"key": "order",
+							"value": "name_asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Followed list desc - users followed",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/2/followed/list?order=name_desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"2",
+						"followed",
+						"list"
+					],
+					"query": [
+						{
+							"key": "order",
+							"value": "name_desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Posts list asc - sellers followed",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/sellers/products/followed/1/list?order=date_asc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"sellers",
+						"products",
+						"followed",
+						"1",
+						"list"
+					],
+					"query": [
+						{
+							"key": "order",
+							"value": "date_asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Posts list desc - sellers followed",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/sellers/products/followed/1/list?order=date_desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"sellers",
+						"products",
+						"followed",
+						"1",
+						"list"
+					],
+					"query": [
+						{
+							"key": "order",
+							"value": "date_desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Posts list asc - users followed",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/products/followed/1/list?order=date_asc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"products",
+						"followed",
+						"1",
+						"list"
+					],
+					"query": [
+						{
+							"key": "order",
+							"value": "date_asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Posts list desc - users followed",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/products/followed/1/list?order=date_desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"products",
+						"followed",
+						"1",
+						"list"
+					],
+					"query": [
+						{
+							"key": "order",
+							"value": "date_desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New prom post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sellerId\": 2,\n    \"id_post\": 12,\n    \"date\": \"08-10-2021\",\n    \"detail\": [{\n        \"productId\":1,\n        \"productName\":\"mouse\",\n        \"productType\": \"gamer\",\n        \"productBrand\": \"race\",\n        \"productColor\": \"red\",\n        \"productNotes\": \"special\"\n    }],\n    \"category\": 8,\n    \"price\": 100.50,\n    \"hasPromo\":true,\n    \"discount\":0.25\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users/products/newpromopost",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"products",
+						"newpromopost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Promo count",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/products/2/countpromo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"products",
+						"2",
+						"countpromo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Seller post promo list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/products/2/promo/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"products",
+						"2",
+						"promo",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all sellers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/sellers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"sellers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add a new seller",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \n    \"sellerId\": 13,\n    \"sellerName\": \"Marcela Santos\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users/sellers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"sellers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add a new user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\n        \"userId\": 20,\n        \"userName\": \"Henrique Castro\"\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
